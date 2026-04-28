@@ -230,11 +230,9 @@
     .sidebar-overlay {
       display: none;
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
+      top: 0; right: 0; bottom: 0; left: 0; /* Android: avoid inset shorthand */
+      background: rgba(0,0,0,0.55);
       z-index: 99;
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
     }
     .sidebar-overlay.visible { display: block; }
 
@@ -372,6 +370,193 @@
       }
     }
 
+    /* ═══════════════════════════════════════════════════════════
+       ANDROID BROWSER SPECIFIC FIXES
+       Covers: Chrome for Android, Samsung Internet, Android WebView,
+               older Android (5.0+), Chromium-based Android browsers
+    ═══════════════════════════════════════════════════════════ */
+
+    /* Android WebView / older Chrome: replace all inset: shorthand
+       with explicit top/right/bottom/left (inset not supported < Chrome 87) */
+    .hero-greeting::before {
+      top: -60px; right: -60px; bottom: auto; left: auto;
+      position: absolute;
+    }
+    .hero-greeting::after {
+      bottom: -40px; left: -40px; top: auto; right: auto;
+      position: absolute;
+    }
+
+    /* Android: aspect-ratio not supported before Chrome 88.
+       Use padding-top hack as fallback for book covers */
+    @supports not (aspect-ratio: 2/3) {
+      .book-cover-wrap {
+        height: 0;
+        padding-top: 150%; /* 2:3 ratio = 150% */
+        position: relative;
+      }
+      .book-cover-wrap img {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .streak-day {
+        width: 100%;
+        height: 36px; /* fallback fixed height instead of aspect-ratio:1 */
+        aspect-ratio: unset;
+      }
+    }
+
+    /* Android: overflow:hidden on fixed elements can glitch — use clip instead */
+    @media (max-width: 767px) {
+      .sidebar {
+        /* Android Chrome: will-change promotes to compositor layer for smooth animation */
+        will-change: transform;
+        -webkit-transform: translateX(-260px);
+        transform: translateX(-260px);
+        /* Solid background fallback for Android (no backdrop-filter support) */
+        background: var(--bg-elevated) !important;
+        /* Ensure sidebar renders above overlay */
+        z-index: 150;
+      }
+      .sidebar.open {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+      }
+    }
+
+    /* Android: backdrop-filter not supported below Chrome 76 */
+    @supports not (-webkit-backdrop-filter: blur(1px)) {
+      .topbar { background: var(--bg-elevated) !important; opacity: 0.97; }
+      .sidebar { background: var(--bg-elevated) !important; }
+      .adm-top { background: var(--bg-elevated) !important; }
+      .login-form-panel { background: var(--bg-elevated) !important; }
+      .continue-reading-card { background: var(--bg-elevated) !important; }
+      .stat-card { background: var(--bg-elevated) !important; }
+      .panel-card { background: var(--bg-elevated) !important; }
+      .settings-card { background: var(--bg-elevated) !important; }
+      .big-stat-card { background: var(--bg-elevated) !important; }
+      #audio-player { background: var(--bg-elevated) !important; }
+      .modal-box { background: var(--bg-elevated) !important; }
+    }
+
+    /* Android: CSS variable with rgba() inside background can fail on very old WebView.
+       Provide solid color fallback values */
+    @supports not (color: rgba(0,0,0,0)) {
+      .bg-card { background: #1a1e2a; }
+      .sidebar { background: #141720; }
+    }
+
+    /* Android: transform3d for GPU acceleration of animated orbs (prevents jank) */
+    .orb, .orb-dash-1, .orb-dash-2, .orb-dash-3 {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      /* Android low-end: reduce blur cost */
+      will-change: transform;
+    }
+
+    /* Android low RAM: disable heavy blur on orbs for performance */
+    @media (max-width: 767px) {
+      .orb, .orb-dash-1, .orb-dash-2, .orb-dash-3 {
+        filter: blur(60px) !important; /* reduced from 110–130px */
+        opacity: 0.12 !important;
+      }
+    }
+
+    /* Android Chrome: fix flexbox gap not supported before Chrome 84 */
+    @supports not (gap: 1px) {
+      .sidebar-nav .nav-item + .nav-item { margin-top: 2px; }
+      .stats-grid > * + * { margin-left: 16px; }
+      .cr-actions { margin-top: 14px; }
+      .cr-actions .btn-read { margin-right: 10px; }
+      .topbar-actions > * + * { margin-left: 7px; }
+      .auth-tabs .auth-tab + .auth-tab { margin-left: 4px; }
+      .genre-tags .genre-tag { margin: 0 4px 6px 0; }
+      .library-controls .filter-btn { margin: 0 6px 6px 0; }
+    }
+
+    /* Android: ensure inputs don't overflow their containers */
+    input, textarea, select {
+      max-width: 100%;
+      min-width: 0; /* fix flexbox shrink bug on Android */
+    }
+
+    /* Android Chrome: fix sticky topbar sometimes disappearing on scroll */
+    .topbar {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      /* Force GPU composite layer */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    /* Android: touch events — prevent passive listener warning and improve scroll */
+    html {
+      touch-action: manipulation; /* disables double-tap zoom, improves tap latency */
+    }
+
+    /* Android Samsung Internet: fix gradient text not rendering */
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+      .login-logo-big, .login-form-logo, .sidebar-logo,
+      .hero-title span, .adm-title, .adm-logo {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        /* Samsung Internet fallback if clip fails */
+        color: transparent;
+      }
+    }
+
+    /* Android: fix modal overlay not covering full screen on some devices */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0; /* explicit instead of inset */
+      width: 100%;
+      height: 100%;
+      /* Android: use 100% not 100vh to avoid browser-chrome-height bug */
+    }
+
+    /* Android: fix progress bar not rendering in some WebViews */
+    .progress-fill, .book-progress-fill, .adm-progress-fill,
+    .ap-progress-fill, .dl-progress-fill {
+      display: block;
+      min-width: 0;
+      /* Android: explicit height needed when parent uses flex */
+      height: 100%;
+    }
+
+    /* Android: fix border-radius on overflow:hidden elements */
+    .book-cover-wrap, .art-book, .modal-box, .stat-card {
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      /* Activates hardware acceleration and fixes border-radius clip on Android */
+    }
+
+    /* Android: table horizontal scroll fix */
+    .adm-table-wrap, div[style*="overflow-x:auto"] {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+
+    /* Android: fix for emoji rendering in buttons (Samsung Internet sometimes clips) */
+    button, .nav-item, .icon-btn {
+      line-height: normal;
+      white-space: nowrap;
+    }
+
+    /* Android: ensure fixed position elements account for virtual keyboard */
+    #audio-player {
+      /* Use env() with fallback for older Android */
+      bottom: 24px;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    }
+
     /* === Windows High Contrast Mode === */
     @media (forced-colors: active) {
       .btn-primary, .btn-read, .hero-cta, .adm-save {
@@ -382,7 +567,6 @@
     }
 
     :root {
-      --font-ui: 'Outfit', 'Inter', sans-serif;
       --font-reading: 'Lora', 'Merriweather', Georgia, serif;
       --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-full: 9999px;
       --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1306,6 +1490,71 @@ function closeSidebar() {
 
 // Close sidebar when a nav item is tapped on mobile
 document.addEventListener('DOMContentLoaded', function() {
+  // ── Android detection ──────────────────────────────────────────
+  var ua = navigator.userAgent || '';
+  var isAndroid = /Android/i.test(ua);
+  var isSamsungBrowser = /SamsungBrowser/i.test(ua);
+  var isAndroidWebView = /wv/.test(ua) && isAndroid;
+  if (isAndroid) document.documentElement.classList.add('is-android');
+  if (isSamsungBrowser) document.documentElement.classList.add('is-samsung');
+  if (isAndroidWebView) document.documentElement.classList.add('is-webview');
+
+  // Android: disable heavy animations on low-end / old WebView devices
+  var lowEnd = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) ||
+               (navigator.deviceMemory && navigator.deviceMemory <= 1);
+  if (lowEnd || isAndroidWebView) {
+    var s = document.createElement('style');
+    s.textContent = [
+      '.is-android.is-webview .orb,',
+      '.is-android.is-webview .orb-dash-1,',
+      '.is-android.is-webview .orb-dash-2,',
+      '.is-android.is-webview .orb-dash-3 { animation: none !important; filter: blur(40px) !important; }',
+      '.is-android .animate-in { animation-duration: 0.15s !important; }',
+      '.is-android .book-card:hover { transform: none !important; }',
+      '.is-android .stat-card:hover { transform: none !important; }',
+    ].join('\n');
+    document.head.appendChild(s);
+  }
+
+  // ── Viewport height (iOS + Android toolbar bug) ────────────────
+  function setVh() {
+    var vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+  }
+  setVh();
+  window.addEventListener('resize', setVh, {passive: true});
+  window.addEventListener('orientationchange', function() {
+    setTimeout(setVh, 300);
+  }, {passive: true});
+
+  // ── Passive touch listeners (Android performance) ───────────────
+  document.addEventListener('touchstart', function(){}, {passive: true});
+  document.addEventListener('touchmove', function(){}, {passive: true});
+
+  // ── OS dark mode ────────────────────────────────────────────────
+  if (!localStorage.getItem('readify_theme')) {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }
+  if (window.matchMedia) {
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem('readify_theme')) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    } catch(e) {
+      // older Android Safari doesn't support addEventListener on MediaQueryList
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
+        if (!localStorage.getItem('readify_theme')) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+  }
+
+  // ── Nav items: close sidebar on mobile tap ──────────────────────
   var navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(function(item) {
     item.addEventListener('click', function() {
@@ -1313,39 +1562,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // OS-level dark mode detection: apply dark theme if user hasn't chosen one
-  if (!localStorage.getItem('readify_theme')) {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-
-  // Listen for OS theme changes in real time
-  if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-      if (!localStorage.getItem('readify_theme')) {
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-      }
-    });
-  }
-
-  // iOS Safari: handle viewport height correctly (fixes 100vh bug with address bar)
-  function setVh() {
-    var vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', function() {
-    setTimeout(setVh, 150); // wait for orientation animation
-  });
-
-  // Keyboard: close sidebar on Escape
+  // ── Keyboard: Escape closes sidebar ────────────────────────────
   document.addEventListener('keydown', function(e) {
     if ((e.key === 'Escape' || e.keyCode === 27) && window.innerWidth < 768) {
       closeSidebar();
     }
   });
+
+  // ── Android: fix for inputs inside forms that may be clipped ───
+  if (isAndroid) {
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+      el.addEventListener('focus', function() {
+        // On Android, scrolling to focused input manually prevents it being
+        // hidden behind the virtual keyboard
+        setTimeout(function() {
+          el.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }, 300);
+      }, {passive: true});
+    });
+  }
 });
 
 // Polyfill: Element.closest for older Android browsers
@@ -1353,14 +1588,31 @@ if (!Element.prototype.closest) {
   Element.prototype.closest = function(s) {
     var el = this;
     do {
-      if (el.matches ? el.matches(s) : el.msMatchesSelector(s)) return el;
+      if (el.matches ? el.matches(s) : el.msMatchesSelector ? el.msMatchesSelector(s) : false) return el;
       el = el.parentElement || el.parentNode;
     } while (el !== null && el.nodeType === 1);
     return null;
   };
 }
 
-// Polyfill: CustomEvent for IE
+// Polyfill: NodeList.forEach for Android < 5 / older Samsung Internet
+if (typeof NodeList !== 'undefined' && NodeList.prototype && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = Array.prototype.forEach;
+}
+
+// Polyfill: Element.matches for older Android WebView
+if (!Element.prototype.matches) {
+  Element.prototype.matches =
+    Element.prototype.msMatchesSelector ||
+    Element.prototype.webkitMatchesSelector ||
+    function(s) {
+      var matches = (this.document || this.ownerDocument).querySelectorAll(s), i = matches.length;
+      while (--i >= 0 && matches.item(i) !== this) {}
+      return i > -1;
+    };
+}
+
+// Polyfill: CustomEvent for IE / old Android WebView
 (function() {
   if (typeof window.CustomEvent === 'function') return;
   function CustomEvent(event, params) {
@@ -1372,6 +1624,23 @@ if (!Element.prototype.closest) {
   CustomEvent.prototype = window.Event.prototype;
   window.CustomEvent = CustomEvent;
 })();
+
+// Polyfill: Object.assign for old Android
+if (typeof Object.assign !== 'function') {
+  Object.assign = function(target) {
+    if (target == null) throw new TypeError('Cannot convert undefined or null to object');
+    target = Object(target);
+    for (var i = 1; i < arguments.length; i++) {
+      var src = arguments[i];
+      if (src != null) {
+        for (var key in src) {
+          if (Object.prototype.hasOwnProperty.call(src, key)) target[key] = src[key];
+        }
+      }
+    }
+    return target;
+  };
+}
 
 // ===================== DATA =====================
 let BOOKS=[
