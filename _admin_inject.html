@@ -1,0 +1,200 @@
+<!-- Admin HTML inserted by script -->
+<div id="page-admin" class="page">
+  <div class="adm-top">
+    <div class="adm-logo">&#x1F6E1;&#xFE0F; Readify Admin</div>
+    <div class="adm-badge">ADMIN</div>
+    <div class="adm-top-right">
+      <div class="icon-btn tooltip-wrap" onclick="toggleTheme()" style="color:var(--text-primary);width:30px;height:30px;font-size:14px;"><span id="adm-theme-icon">☀️</span><div class="tooltip">Toggle Theme</div></div>
+      <span class="adm-top-time" id="adm-clock"></span>
+      <button class="adm-back" onclick="closeAdminPanel()">&#x2190; Back to App</button>
+    </div>
+  </div>
+  <div class="adm-layout">
+    <aside class="adm-sidebar">
+      <div class="adm-nav-sec">Overview</div>
+      <div class="adm-nav-item active" onclick="admNav('overview')" id="adm-nav-overview"><span class="adm-nav-ic">&#x1F4CA;</span>Dashboard</div>
+      <div class="adm-nav-item" onclick="admNav('analytics')" id="adm-nav-analytics"><span class="adm-nav-ic">&#x1F4C8;</span>Analytics</div>
+      <div class="adm-nav-sec">Management</div>
+      <div class="adm-nav-item" onclick="admNav('users')" id="adm-nav-users"><span class="adm-nav-ic">&#x1F465;</span>Users</div>
+      <div class="adm-nav-item" onclick="admNav('books')" id="adm-nav-books"><span class="adm-nav-ic">&#x1F4DA;</span>Books</div>
+      <div class="adm-nav-item" onclick="admNav('reports')" id="adm-nav-reports"><span class="adm-nav-ic">&#x1F4CB;</span>Reports</div>
+      <div class="adm-nav-sec">System</div>
+      <div class="adm-nav-item" onclick="admNav('logs')" id="adm-nav-logs"><span class="adm-nav-ic">&#x1F50D;</span>Audit Logs<span class="adm-notify-dot"></span></div>
+      <div class="adm-nav-item" onclick="admNav('settings')" id="adm-nav-settings"><span class="adm-nav-ic">&#x2699;&#xFE0F;</span>Settings</div>
+    </aside>
+    <main class="adm-main">
+
+      <!-- OVERVIEW -->
+      <div class="adm-sec active" id="adm-overview">
+        <div class="adm-title">Control Center</div>
+        <div class="adm-sub" id="adm-welcome-sub">Welcome back, Admin.</div>
+        <div class="adm-kpi-grid">
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F465;</div><div class="adm-kpi-val" id="adm-kpi-users">0</div><div class="adm-kpi-lbl">Total Users</div><div class="adm-kpi-chg up">&#x2191; Live count</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F4D6;</div><div class="adm-kpi-val" id="adm-kpi-reads">0</div><div class="adm-kpi-lbl">Books Read</div><div class="adm-kpi-chg up">&#x2191; All users</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x23F1;&#xFE0F;</div><div class="adm-kpi-val" id="adm-kpi-hours">0h</div><div class="adm-kpi-lbl">Reading Hours</div><div class="adm-kpi-chg up">&#x2191; All time</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F4DA;</div><div class="adm-kpi-val">6</div><div class="adm-kpi-lbl">Books in Library</div><div class="adm-kpi-chg up">&#x2191; Active</div></div>
+        </div>
+        <div class="adm-grid2">
+          <div class="adm-card">
+            <div class="adm-card-title">User Activity (7 days) <span style="color:#10b981;font-size:11px">&#x25CF; Live</span></div>
+            <div class="adm-bar-chart" id="adm-bar-chart"></div>
+            <div style="display:flex;gap:0;margin-top:4px" id="adm-bar-labels"></div>
+          </div>
+          <div class="adm-card">
+            <div class="adm-card-title">Genre Distribution</div>
+            <div class="adm-pie-wrap" id="adm-genre-chart"></div>
+          </div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-title">Recent Activity Feed</div>
+          <div id="adm-recent-activity"></div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="adm-sec" id="adm-analytics">
+        <div class="adm-title">Analytics</div>
+        <div class="adm-sub">Deep-dive platform engagement metrics.</div>
+        <div class="adm-kpi-grid">
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F4C4;</div><div class="adm-kpi-val" id="adm-kpi-pages">0</div><div class="adm-kpi-lbl">Pages Read</div><div class="adm-kpi-chg up">All users</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F525;</div><div class="adm-kpi-val" id="adm-kpi-streaks">0</div><div class="adm-kpi-lbl">Avg Streak (days)</div><div class="adm-kpi-chg up">&#x2191; Active</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x2B07;&#xFE0F;</div><div class="adm-kpi-val" id="adm-kpi-downloads">0</div><div class="adm-kpi-lbl">Downloads</div><div class="adm-kpi-chg up">This session</div></div>
+          <div class="adm-kpi"><div class="adm-kpi-icon">&#x1F516;</div><div class="adm-kpi-val" id="adm-kpi-bookmarks">0</div><div class="adm-kpi-lbl">Bookmarks</div><div class="adm-kpi-chg up">Platform-wide</div></div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-title">Top Books by User Progress</div>
+          <div id="adm-top-books-chart" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="adm-sec" id="adm-users">
+        <div class="adm-title">User Management</div>
+        <div class="adm-sub">View, manage, and moderate all registered users.</div>
+        <div class="adm-toolbar">
+          <input class="adm-search" id="adm-user-search" placeholder="Search users..." oninput="admFilterUsers()">
+          <div class="adm-filter on" onclick="admUserFilter('all',this)">All</div>
+          <div class="adm-filter" onclick="admUserFilter('active',this)">Active</div>
+          <div class="adm-filter" onclick="admUserFilter('admin',this)">Admins</div>
+        </div>
+        <div class="adm-card">
+          <table class="adm-table">
+            <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Books</th><th>Hours</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="adm-users-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BOOKS -->
+      <div class="adm-sec" id="adm-books">
+        <div class="adm-title">Book Library</div>
+        <div class="adm-sub">Manage the platform catalog.</div>
+        <div class="adm-toolbar">
+          <input class="adm-search" placeholder="Search books..." oninput="admFilterBooks(this.value)">
+          <button class="adm-save" style="margin-left:auto;padding:7px 16px;font-size:12px" onclick="admShowAddBook()">+ Add Book</button>
+        </div>
+        <div class="adm-books-grid" id="adm-books-grid"></div>
+      </div>
+
+      <!-- REPORTS -->
+      <div class="adm-sec" id="adm-reports">
+        <div class="adm-title">Reports</div>
+        <div class="adm-sub">Generate and export platform reports.</div>
+        <div class="adm-grid2">
+          <div class="adm-card">
+            <div class="adm-card-title">Export Report</div>
+            <div style="margin-bottom:14px;font-size:13px;color:#4b5563">Includes reading hours, pages, streaks, and genre data for all accounts.</div>
+            <button class="adm-save" onclick="admExportReport('csv')">&#x2B07;&#xFE0F; Export CSV</button>
+            <button class="adm-save" style="margin-left:8px;background:linear-gradient(135deg,#06b6d4,#0891b2)" onclick="admExportReport('json')">&#x2B07;&#xFE0F; Export JSON</button>
+          </div>
+          <div class="adm-card">
+            <div class="adm-card-title">Platform Statistics</div>
+            <div id="adm-report-stats" style="font-size:13px;color:#6b7280;line-height:2.2"></div>
+          </div>
+        </div>
+        <div class="adm-card" style="margin-top:14px">
+          <div class="adm-card-title">User Progress Breakdown</div>
+          <div style="overflow-x:auto"><table class="adm-table"><thead><tr><th>User</th><th>Books Read</th><th>Pages</th><th>Hours</th><th>Best Streak</th></tr></thead><tbody id="adm-report-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- LOGS -->
+      <div class="adm-sec" id="adm-logs">
+        <div class="adm-title">Audit Logs</div>
+        <div class="adm-sub">Real-time log of all significant platform events.</div>
+        <div class="adm-toolbar">
+          <div class="adm-filter on" onclick="admLogFilter('all',this)">All</div>
+          <div class="adm-filter" onclick="admLogFilter('ok',this)">Success</div>
+          <div class="adm-filter" onclick="admLogFilter('warn',this)">Warnings</div>
+          <div class="adm-filter" onclick="admLogFilter('err',this)">Errors</div>
+          <button class="adm-save" style="margin-left:auto;padding:7px 16px;font-size:12px" onclick="admClearLogs()">&#x1F5D1; Clear Logs</button>
+        </div>
+        <div class="adm-card"><div id="adm-logs-list"></div></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="adm-sec" id="adm-settings">
+        <div class="adm-title">System Settings</div>
+        <div class="adm-sub">Configure platform-wide behavior.</div>
+        <div class="adm-sett-grid">
+          <div class="adm-sett-card">
+            <div class="adm-sett-card-title">Admin Credentials</div>
+            <div class="adm-form-row"><label class="adm-lbl">Admin Email</label><input class="adm-inp" value="admin@readify.io" readonly></div>
+            <div class="adm-form-row"><label class="adm-lbl">New Password</label><input class="adm-inp" type="password" id="adm-pw-inp" placeholder="New password"></div>
+            <div class="adm-form-row"><label class="adm-lbl">Confirm</label><input class="adm-inp" type="password" id="adm-pw2-inp" placeholder="Confirm password"></div>
+            <button class="adm-save" onclick="admChangePassword()">Save Password</button>
+          </div>
+          <div class="adm-sett-card">
+            <div class="adm-sett-card-title">Platform Toggles</div>
+            <div class="adm-toggle-row"><div class="adm-toggle-lbl">Allow New Registrations</div><div class="toggle" id="adm-tgl-allowReg" onclick="admToggleSetting('allowReg', this)"></div></div>
+            <div class="adm-toggle-row"><div class="adm-toggle-lbl">Maintenance Mode</div><div class="toggle" id="adm-tgl-maintenance" onclick="admToggleSetting('maintenance', this)"></div></div>
+            <div class="adm-toggle-row"><div class="adm-toggle-lbl">Enable Downloads</div><div class="toggle" id="adm-tgl-downloads" onclick="admToggleSetting('downloads', this)"></div></div>
+            <div class="adm-toggle-row"><div class="adm-toggle-lbl">Analytics Tracking</div><div class="toggle" id="adm-tgl-tracking" onclick="admToggleSetting('tracking', this)"></div></div>
+            <div style="margin-top:14px"><button class="adm-save" onclick="showToast('&#x2705; Toggles saved to settings')">Save</button></div>
+          </div>
+          <div class="adm-sett-card">
+            <div class="adm-sett-card-title">Broadcast Message</div>
+            <div class="adm-form-row"><label class="adm-lbl">Message for all users</label><textarea class="adm-inp" id="adm-broadcast-msg" rows="3" placeholder="Type broadcast message..."></textarea></div>
+            <button class="adm-save" onclick="admBroadcast()">&#x1F4E3; Send Broadcast</button>
+          </div>
+          <div class="adm-sett-card">
+            <div class="adm-sett-card-title">Data Management</div>
+            <div style="font-size:12px;color:#4b5563;line-height:1.8;margin-bottom:14px">Manage localStorage data. These actions are irreversible.</div>
+            <div style="margin-bottom:12px;font-size:12px;color:#6b7280" id="adm-storage-info">Storage: calculating...</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="adm-act-btn b" onclick="admExportAllData()">&#x2B07;&#xFE0F; Backup Data</button>
+              <button class="adm-act-btn r" onclick="admNukeAllData()">&#x1F5D1; Clear ALL Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Admin Book Modal -->
+    <div class="modal-overlay" id="adm-book-modal">
+      <div class="modal-box" style="max-width:500px;background:var(--bg-card);border:1px solid var(--border-accent);">
+        <div class="modal-title" id="adm-book-modal-title" style="color:var(--text-primary)">Add Book</div>
+        <div class="modal-desc" style="margin-bottom:16px">Enter book details.</div>
+        <input type="hidden" id="adm-book-id" value="">
+        <div class="adm-form-row"><label class="adm-lbl">Title</label><input type="text" id="adm-book-title" class="adm-inp" placeholder="Book Title"></div>
+        <div class="adm-form-row"><label class="adm-lbl">Author</label><input type="text" id="adm-book-author" class="adm-inp" placeholder="Author Name"></div>
+        <div class="adm-form-row"><label class="adm-lbl">Genre</label>
+          <select id="adm-book-genre" class="adm-inp" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);font-family:var(--font-ui);">
+            <option style="background:var(--bg-elevated)" value="Fantasy">Fantasy</option>
+            <option style="background:var(--bg-elevated)" value="Sci-Fi">Sci-Fi</option>
+            <option style="background:var(--bg-elevated)" value="Thriller">Thriller</option>
+            <option style="background:var(--bg-elevated)" value="Adventure">Adventure</option>
+            <option style="background:var(--bg-elevated)" value="Romance">Romance</option>
+          </select>
+        </div>
+        <div class="adm-form-row"><label class="adm-lbl">Pages</label><input type="number" id="adm-book-pages" class="adm-inp" placeholder="e.g. 350"></div>
+        <div class="adm-form-row"><label class="adm-lbl">Cover URL</label><input type="text" id="adm-book-cover" class="adm-inp" placeholder="https://..."></div>
+        <div class="modal-actions" style="margin-top:24px">
+          <button class="btn-outline" style="border-color:var(--border);color:var(--text-secondary)" onclick="document.getElementById('adm-book-modal').classList.remove('open')">Cancel</button>
+          <button class="adm-save" onclick="admSaveBook()">Save Book</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
