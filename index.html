@@ -1,15 +1,386 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+  <!-- ═══════════════════════════════════════════════════════
+       CROSS-BROWSER & CROSS-DEVICE COMPATIBILITY
+       Supports: Chrome, Firefox, Safari, Edge, Samsung Internet,
+                 iOS Safari, Android Chrome, macOS, Windows
+  ═══════════════════════════════════════════════════════ -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Viewport: prevents horizontal scroll on mobile, allows user scaling for accessibility -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- IE compatibility (legacy) -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
   <title>Readify — Your Premium Reading Experience</title>
   <meta name="description" content="Readify is a premium book reading platform. Track your library, reading progress, and enjoy a distraction-free reader page." />
+
+  <!-- PWA / iOS Safari home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Readify" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Theme color for Android Chrome browser chrome & Samsung Internet -->
+  <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f0f2f8" media="(prefers-color-scheme: light)" />
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:title" content="Readify — Your Premium Reading Experience" />
+  <meta property="og:description" content="Track your library, reading progress, and enjoy a distraction-free reading experience." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts with display=swap for performance across all browsers -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
+    /* ═══════════════════════════════════════════════════════════
+       CROSS-BROWSER RESETS & FIXES
+       Covers: Safari (iOS/macOS), Chrome (Android/Desktop),
+               Firefox, Edge, Samsung Internet, Opera Mini
+    ═══════════════════════════════════════════════════════════ */
+
+    /* Normalize box model universally */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+    }
+
+    /* iOS Safari: prevent font size inflation on rotation */
+    html {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    /* iOS Safari: safe area insets for notched/Dynamic Island devices */
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    /* iOS Safari: remove tap highlight on interactive elements */
+    a, button, input, select, textarea, [role="button"], [onclick] {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    /* iOS Safari: prevent callout (long press menu) on non-input elements */
+    img, .book-card, .nav-item, .stat-card {
+      -webkit-touch-callout: none;
+    }
+
+    /* Firefox: remove default button styles */
+    button::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+    }
+
+    /* Firefox: fix input appearance */
+    input, textarea, select {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* Safari: fix number input spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* Safari: fix search input */
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+
+    /* iOS Safari: prevent zoom on input focus (font-size must be >= 16px) */
+    input[type="text"], input[type="email"], input[type="password"],
+    input[type="number"], input[type="search"], textarea, select {
+      font-size: 16px;
+    }
+
+    /* Fix iOS Safari momentum scrolling in scroll containers */
+    .sidebar, .adm-sidebar, .modal-box, .reader-body {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+    }
+
+    /* Backdrop-filter: prefixed for Safari & older Chrome */
+    .liquid-glass,
+    .sidebar,
+    .topbar,
+    .login-form-panel,
+    .continue-reading-card,
+    .stat-card,
+    .panel-card,
+    .settings-card,
+    .big-stat-card,
+    #audio-player,
+    .modal-box,
+    .adm-top {
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
+    }
+
+    /* Firefox doesn't support backdrop-filter — provide solid fallback */
+    @supports not (backdrop-filter: blur(1px)) {
+      .sidebar { background: var(--bg-elevated) !important; }
+      .topbar { background: var(--bg-elevated) !important; }
+      .login-form-panel { background: var(--bg-elevated) !important; }
+      .liquid-glass { background: var(--bg-elevated) !important; }
+      .panel-card { background: var(--bg-elevated) !important; }
+      .settings-card { background: var(--bg-elevated) !important; }
+      .big-stat-card { background: var(--bg-elevated) !important; }
+      #audio-player { background: var(--bg-elevated) !important; }
+      .modal-box { background: var(--bg-elevated) !important; }
+      .adm-top { background: var(--bg-elevated) !important; }
+    }
+
+    /* Safari: -webkit-background-clip text (gradient text) */
+    .login-logo-big, .login-form-logo, .sidebar-logo,
+    .hero-title span, .adm-title, .adm-logo {
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Edge / IE: fallback for CSS Grid gap shorthand */
+    .stats-grid, .dashboard-grid, .books-grid,
+    .library-grid, .settings-grid, .stats-page-grid,
+    .adm-kpi-grid, .adm-grid2, .adm-books-grid, .adm-sett-grid {
+      grid-gap: 16px; /* legacy */
+    }
+
+    /* Prevent horizontal overflow globally on all devices */
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    /* Smooth scrolling — with reduced-motion override for accessibility */
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Custom scrollbar — hidden on Firefox & iOS (graceful) */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 9999px; }
+
+    /* Touch-action: allow smooth panning on touch devices */
+    .books-grid, .library-grid, .adm-table-wrap {
+      touch-action: pan-x pan-y;
+    }
+
+    /* Make clickable items easier to tap on mobile (min 44×44px touch target) */
+    .nav-item, .icon-btn, .btn-primary, .btn-read, .btn-outline,
+    .hero-cta, .auth-tab, .filter-btn, .genre-tag,
+    .adm-nav-item, .adm-filter, .adm-save, .adm-act-btn {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Restore non-flex layouts for elements that need it */
+    .nav-item { justify-content: flex-start; }
+    .adm-nav-item { justify-content: flex-start; }
+    .adm-filter, .genre-tag, .filter-btn { min-height: 36px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE ENHANCEMENTS
+       (supplements existing breakpoints)
+    ═══════════════════════════════════════════════════════════ */
+
+    /* === Mobile hamburger button for main sidebar === */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 200;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      font-size: 18px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Sidebar overlay backdrop for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+    .sidebar-overlay.visible { display: block; }
+
+    @media (max-width: 767px) {
+      .mobile-menu-btn { display: flex; }
+
+      /* Push topbar title right to clear the hamburger */
+      .topbar { padding-left: 64px; }
+
+      /* Slide-in sidebar */
+      .sidebar {
+        transform: translateX(-260px);
+        -webkit-transform: translateX(-260px);
+        width: 260px;
+        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
+      }
+
+      /* Full-width main content on mobile */
+      .main-content { margin-left: 0 !important; }
+
+      /* Stack hero greeting vertically on small screens */
+      .hero-greeting {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 22px 18px;
+      }
+
+      /* Stack continue reading card */
+      .continue-reading-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .cr-book-cover { width: 70px; height: 100px; }
+
+      /* Stat cards: 2 cols on mobile */
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+      /* Dashboard grid: single col */
+      .dashboard-grid { grid-template-columns: 1fr; }
+
+      /* Book grids: 2 cols on phones */
+      .books-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .library-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+      /* Settings: single col */
+      .settings-grid { grid-template-columns: 1fr; }
+      .stats-page-grid { grid-template-columns: 1fr; }
+
+      /* Audio player: full width on mobile */
+      #audio-player {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+      }
+
+      /* Content padding */
+      .content-area { padding: 14px; }
+
+      /* Reader text area */
+      .reader-content { padding: 32px 16px 120px !important; }
+
+      /* Login: stack vertically */
+      #page-login { flex-direction: column; }
+      .login-art { min-height: 220px; padding: 32px 20px; }
+      .login-form-panel { width: 100%; padding: 28px 20px; border-left: none; border-top: 1px solid var(--glass-border); }
+      .login-stats { gap: 20px; }
+
+      /* Modal: full-screen feel on small phones */
+      .modal-overlay { padding: 12px; align-items: flex-end; }
+      .modal-box { max-width: 100% !important; max-height: 90vh; overflow-y: auto; border-radius: 20px 20px 0 0; }
+
+      /* Search bar: full width */
+      .search-bar { width: 100%; max-width: none; }
+
+      /* Topbar: compact */
+      .topbar-title { font-size: 15px; }
+      .topbar { height: 58px; padding-right: 12px; }
+    }
+
+    /* === Tablet (768px–1023px) === */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .content-area { padding: 20px 22px; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .books-grid { grid-template-columns: repeat(3, 1fr); }
+      .library-grid { grid-template-columns: repeat(3, 1fr); }
+      #audio-player { width: 280px; }
+    }
+
+    /* === Large phones (portrait) & small tablets === */
+    @media (max-width: 480px) {
+      .books-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .hero-title { font-size: 20px; }
+      .hero-cta { padding: 10px 18px; font-size: 13px; }
+      .login-logo-big { font-size: 38px; }
+      .login-tagline { font-size: 14px; }
+      .login-art-books .art-book { width: 56px; height: 80px; }
+    }
+
+    /* === Very small phones (320px) === */
+    @media (max-width: 359px) {
+      .books-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-value { font-size: 22px; }
+      .content-area { padding: 10px; }
+    }
+
+    /* === Print styles === */
+    @media print {
+      .sidebar, .topbar, #audio-player, .mobile-menu-btn { display: none !important; }
+      .main-content { margin-left: 0 !important; }
+      body { background: white !important; color: black !important; }
+    }
+
+    /* === High-DPI / Retina displays === */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .book-cover-wrap img { image-rendering: -webkit-optimize-contrast; }
+    }
+
+    /* === Dark mode OS preference (auto-applies before JS theme loads) === */
+    @media (prefers-color-scheme: dark) {
+      html:not([data-theme]) {
+        --bg-base: #0a0d14; --bg-elevated: #141720; --bg-card: rgba(26, 30, 42, 0.45);
+        --text-primary: #f0f2f8; --text-secondary: #8892b0;
+      }
+    }
+
+    /* === Windows High Contrast Mode === */
+    @media (forced-colors: active) {
+      .btn-primary, .btn-read, .hero-cta, .adm-save {
+        border: 2px solid ButtonText;
+        forced-color-adjust: none;
+      }
+      .progress-fill, .adm-progress-fill { background: Highlight; }
+    }
+
     :root {
       --font-ui: 'Outfit', 'Inter', sans-serif;
       --font-reading: 'Lora', 'Merriweather', Georgia, serif;
@@ -92,12 +463,10 @@
       --gradient-card: linear-gradient(145deg, rgba(15,43,51,0.5), rgba(12,35,42,0.4));
       --gradient-progress: linear-gradient(90deg,#0ea5e9,#10b981);
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;}
+    *,*::before,*::after{margin:0;padding:0;}
+    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
     img{max-width:100%;display:block;}a{text-decoration:none;color:inherit;}
     button{cursor:pointer;border:none;background:none;font-family:inherit;}ul{list-style:none;}
-    ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:var(--r-full);}
 
     .page{display:none; opacity:0; transform:scale(0.95) translateY(18px); transition:opacity 0.5s var(--ease), transform 0.5s var(--ease-spring);}
     .page.active{display:flex; opacity:1; transform:scale(1) translateY(0);}
@@ -110,7 +479,7 @@
 
 
     /* ===== LOGIN ===== */
-    #page-login{min-height:100vh;background:var(--gradient-hero);flex-direction:row;align-items:stretch;}
+    #page-login{min-height:100vh;min-height:calc(var(--vh,1vh)*100);background:var(--gradient-hero);flex-direction:row;align-items:stretch;}
     .login-art{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;background:linear-gradient(145deg,#12003e 0%,#1a1040 40%,#0a1628 100%);}
     .login-art-bg{position:absolute;inset:0;overflow:hidden;}
     .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.5;animation:floatOrb 8s ease-in-out infinite alternate;}
@@ -156,8 +525,8 @@
     .btn-social:hover{background:var(--bg-card-hover);border-color:var(--border-accent);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
 
     /* ===== DASHBOARD LAYOUT ===== */
-    #page-dashboard{min-height:100vh;flex-direction:row;}
-    .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
+    #page-dashboard{min-height:100vh;min-height:calc(var(--vh,1vh)*100);flex-direction:row;}
+    .sidebar{width:var(--sidebar-w);min-height:100vh;min-height:calc(var(--vh,1vh)*100);background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
     .sidebar-logo{padding:26px 22px 20px;font-size:22px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;border-bottom:1px solid var(--divider);}
     .sidebar-user{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:1px solid var(--divider);}
     .user-avatar{width:42px;height:42px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:white;flex-shrink:0;box-shadow:0 0 0 2px rgba(124,58,237,0.35);}
@@ -564,6 +933,12 @@
 </head>
 <body>
 
+<!-- Mobile sidebar overlay (shown when sidebar is open on small screens) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- Mobile hamburger button (only visible on small screens) -->
+<button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+
 <!-- ===================== LOGIN ===================== -->
 <div id="page-login" class="page active">
   <div class="login-art">
@@ -899,6 +1274,105 @@
 </div>
 
 <script>
+// ═══════════════════════════════════════════════
+// CROSS-BROWSER & MOBILE COMPATIBILITY FUNCTIONS
+// ═══════════════════════════════════════════════
+
+// Mobile sidebar toggle
+function toggleSidebar() {
+  var sidebar = document.querySelector('.sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar) return;
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+    document.body.style.overflow = '';
+  } else {
+    sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('visible');
+    // Prevent body scroll while sidebar is open on mobile
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeSidebar() {
+  var sidebar = document.querySelector('.sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+// Close sidebar when a nav item is tapped on mobile
+document.addEventListener('DOMContentLoaded', function() {
+  var navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (window.innerWidth < 768) closeSidebar();
+    });
+  });
+
+  // OS-level dark mode detection: apply dark theme if user hasn't chosen one
+  if (!localStorage.getItem('readify_theme')) {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }
+
+  // Listen for OS theme changes in real time
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem('readify_theme')) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
+  // iOS Safari: handle viewport height correctly (fixes 100vh bug with address bar)
+  function setVh() {
+    var vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', function() {
+    setTimeout(setVh, 150); // wait for orientation animation
+  });
+
+  // Keyboard: close sidebar on Escape
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Escape' || e.keyCode === 27) && window.innerWidth < 768) {
+      closeSidebar();
+    }
+  });
+});
+
+// Polyfill: Element.closest for older Android browsers
+if (!Element.prototype.closest) {
+  Element.prototype.closest = function(s) {
+    var el = this;
+    do {
+      if (el.matches ? el.matches(s) : el.msMatchesSelector(s)) return el;
+      el = el.parentElement || el.parentNode;
+    } while (el !== null && el.nodeType === 1);
+    return null;
+  };
+}
+
+// Polyfill: CustomEvent for IE
+(function() {
+  if (typeof window.CustomEvent === 'function') return;
+  function CustomEvent(event, params) {
+    params = params || {bubbles: false, cancelable: false, detail: null};
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+  CustomEvent.prototype = window.Event.prototype;
+  window.CustomEvent = CustomEvent;
+})();
+
 // ===================== DATA =====================
 let BOOKS=[
   {id:0,title:"The Midnight Throne",author:"Elena Rivers",genre:"Fantasy",pages:428,rating:4.8,progress:64,status:"reading",currentChapter:2,
@@ -1295,7 +1769,7 @@ function goToLogin(){
 }
 
 // ===================== PAGES =====================
-function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+p).classList.add("active");document.body.style.overflow=p==="reader"?"hidden auto":"";}
+function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+p).classList.add("active");document.body.style.overflow=p==="reader"?"hidden auto":"";if(window.innerWidth<768)closeSidebar();}
 
 // ===================== DASHBOARD =====================
 function initDash(){
