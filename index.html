@@ -2,11 +2,19 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Android Viewport: supports display-cutout for notch/punch-hole devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <!-- Android PWA -->
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="MobileOptimized" content="width" />
+  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Bangla Scan" />
+  <!-- Android Chrome theme colors (light/dark) -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f0f2f8" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0d14" />
   <meta name="theme-color" content="#7c3aed" />
   <meta name="application-name" content="Bangla Scan" />
   <link rel="manifest" href="./manifest.json" />
@@ -106,13 +114,99 @@
       --bg-sidebar-solid: #0a2028;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none;}
-    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none; user-select:none; -webkit-user-select:none;}
-    p, h1, h2, h3, h4, span.reader-text, .reader-body, input, textarea { user-select: text; -webkit-user-select: text; }
+    /* ===== ANDROID/MOBILE CORE ===== */
+    html{
+      scroll-behavior:smooth;
+      -webkit-text-size-adjust:100%; text-size-adjust:100%;
+      /* Block pull-to-refresh & overscroll glow on Android Chrome */
+      overscroll-behavior-y:none;
+      /* Android display-cutout: extend into notch area */
+      padding-top: env(safe-area-inset-top);
+    }
+    body{
+      font-family:var(--font-ui);
+      background:var(--bg-base); color:var(--text-primary);
+      line-height:1.6; overflow-x:hidden;
+      transition:background var(--t-normal) var(--ease), color var(--t-normal) var(--ease);
+      min-height:100vh; min-height:100dvh; /* Dynamic viewport for Android Chrome address bar */
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      /* Android: no tap flash, no callout, no text selection on UI */
+      -webkit-tap-highlight-color:transparent;
+      -webkit-touch-callout:none;
+      user-select:none; -webkit-user-select:none;
+      /* GPU-accelerate the entire app */
+      -webkit-transform:translateZ(0); transform:translateZ(0);
+      /* Android bottom nav bar safe area */
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    /* Allow text selection in reading/input areas */
+    p, h1, h2, h3, h4, .reader-body, input, textarea, select { user-select:text; -webkit-user-select:text; }
     img{max-width:100%;display:block;image-rendering:auto;}a{text-decoration:none;color:inherit;}
-    button{cursor:pointer;border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}ul{list-style:none;}
-    ::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:var(--r-full);}
+    /* Buttons: touch-action for fast tap, no highlight */
+    button{
+      cursor:pointer; border:none; background:none; font-family:inherit;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation; /* removes 300ms delay on Android */
+      position:relative; overflow:hidden; /* needed for ripple */
+    }
+    ul{list-style:none;}
+    /* Android-style thin scrollbars */
+    ::-webkit-scrollbar{width:3px;height:3px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--accent-1);border-radius:var(--r-full);opacity:0.5;}
     *:focus-visible{outline:2px solid var(--accent-1);outline-offset:2px;border-radius:4px;}
+    /* ===== MATERIAL RIPPLE ===== */
+    .ripple-container{position:relative;overflow:hidden;}
+    .ripple-wave{
+      position:absolute; border-radius:50%;
+      background:rgba(255,255,255,0.28);
+      transform:scale(0); animation:rippleAnim 0.55s linear;
+      pointer-events:none; will-change:transform,opacity;
+    }
+    @keyframes rippleAnim{
+      to{transform:scale(4); opacity:0;}
+    }
+    /* ===== ANDROID GPU ACCELERATION ===== */
+    .sidebar,.topbar,.bottom-nav,.book-card,.panel-card,.stat-card,.modal-box,.reader-settings-panel{
+      will-change:transform; -webkit-transform:translateZ(0); transform:translateZ(0);
+    }
+    /* ===== ANDROID SCROLL CONTAINERS ===== */
+    .content-area,.shelf-scroll,.library-grid,.books-grid,.explore-grid,.tab-content{
+      -webkit-overflow-scrolling:touch;
+      scroll-snap-type:none;
+    }
+    /* Momentum scrolling for horizontal shelves */
+    .shelf-scroll{
+      -webkit-overflow-scrolling:touch;
+      scroll-behavior:smooth;
+    }
+    /* ===== ANDROID SAFE AREA (ALL SIDES) ===== */
+    .topbar{
+      padding-left:max(14px, env(safe-area-inset-left));
+      padding-right:max(14px, env(safe-area-inset-right));
+    }
+    .sidebar{
+      padding-left:env(safe-area-inset-left);
+    }
+    /* ===== OFFLINE BANNER ===== */
+    #offline-banner{
+      display:none; position:fixed; top:0; left:0; right:0; z-index:99999;
+      background:#ef4444; color:#fff;
+      font-size:12px; font-weight:700; text-align:center;
+      padding:8px 16px; padding-top:calc(8px + env(safe-area-inset-top));
+      letter-spacing:0.5px;
+    }
+    #offline-banner.show{display:block;}
+    /* ===== ANDROID ACTIVE STATES (replaces hover for touch) ===== */
+    @media(hover:none) and (pointer:coarse){
+      .book-card:active{transform:scale(0.97); opacity:0.9;}
+      .btn-primary:active,.btn-outline:active,.adm-save:active{transform:scale(0.97);}
+      .nav-item:active{background:var(--bg-card-hover);}
+      .filter-btn:active,.genre-tag:active,.cat-chip:active{transform:scale(0.95);}
+      /* No hover states on Android */
+      .book-card:hover{transform:none;}
+      .adm-kpi:hover{transform:none;}
+    }
 
     .page{display:none; opacity:0; transform:scale(0.95) translateY(18px); transition:opacity 0.5s var(--ease), transform 0.5s var(--ease-spring);}
     .page.active{display:flex; opacity:1; transform:none;}
@@ -598,17 +692,19 @@
       .books-grid,.library-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
       .content-area{padding:10px;}
     }
-    /* Touch device optimizations */
+    /* ===== TOUCH DEVICE / ANDROID SPECIFIC ===== */
     @media(hover:none) and (pointer:coarse){
-      .icon-btn,.nav-item,.book-card,.filter-btn,.btn-primary,.btn-outline{-webkit-tap-highlight-color:transparent;}
+      .icon-btn,.nav-item,.book-card,.filter-btn,.btn-primary,.btn-outline{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
       .book-card{cursor:default;}
-      .book-overlay{opacity:0;}
+      .book-overlay{opacity:0; transition:opacity 0.15s;}
       .book-card:active .book-overlay{opacity:1;}
-      .nav-item:active,.icon-btn:active{transform:scale(0.94);}
+      .nav-item:active,.icon-btn:active{transform:scale(0.94); transition:transform 0.1s;}
+      /* Android: show install prompt more prominently */
+      #pwa-install-banner{bottom:calc(80px + env(safe-area-inset-bottom))!important;}
     }
     /* Sidebar overlay on mobile */
-    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;}
-    .sidebar-overlay.active{display:block;}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+    .sidebar-overlay.active{display:block;animation:fadeIn 0.2s ease;}
     /* ===== ADMIN PANEL ===== */
     #page-admin{min-height:100vh;background:var(--bg-base);color:var(--text-primary);flex-direction:column;}
     .adm-top{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;background:var(--bg-overlay);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;}
@@ -2937,9 +3033,143 @@ function openSidebar() {
     // Touch vs pointer
     const isTouch = window.matchMedia('(hover:none) and (pointer:coarse)').matches;
     body.classList.toggle('is-touch', isTouch);
+    // Android detection
+    const isAndroid = /android/i.test(navigator.userAgent);
+    body.classList.toggle('is-android', isAndroid);
   }
   applyDeviceClass();
   window.addEventListener('resize', applyDeviceClass);
+})();
+
+// ===== MATERIAL DESIGN RIPPLE ENGINE =====
+(function() {
+  function createRipple(e) {
+    const btn = e.currentTarget;
+    // Only on touch/click — skip if it's inside an input
+    const tag = e.target?.tagName?.toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+    const circle = document.createElement('span');
+    const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+    const radius = diameter / 2;
+    const rect = btn.getBoundingClientRect();
+    const x = (e.clientX || (rect.left + rect.width/2)) - rect.left - radius;
+    const y = (e.clientY || (rect.top + rect.height/2)) - rect.top - radius;
+
+    circle.className = 'ripple-wave';
+    circle.style.cssText = `width:${diameter}px;height:${diameter}px;left:${x}px;top:${y}px;`;
+    // Remove any old ripple
+    btn.querySelector('.ripple-wave')?.remove();
+    btn.appendChild(circle);
+    circle.addEventListener('animationend', () => circle.remove(), {once:true});
+  }
+
+  function attachRipples() {
+    const targets = document.querySelectorAll(
+      '.btn-primary,.btn-outline,.filter-btn,.nav-item,.adm-save,.adm-act-btn,.adm-nav-item,.cat-chip,.genre-tag,.auth-tab,.reader-theme-btn,.font-family-btn,.margin-btn,.book-read-btn'
+    );
+    targets.forEach(el => {
+      if (el.dataset.ripple) return;
+      el.dataset.ripple = '1';
+      el.classList.add('ripple-container');
+      el.addEventListener('pointerdown', createRipple);
+    });
+  }
+  // Attach on load and after any navTo (content changes)
+  document.addEventListener('DOMContentLoaded', attachRipples);
+  const origNavTo = window.navTo;
+  if (typeof navTo === 'function') {
+    window.navTo = function(...args) { origNavTo?.(...args); setTimeout(attachRipples, 120); };
+  }
+  setTimeout(attachRipples, 600);
+})();
+
+// ===== ANDROID VIBRATION HAPTICS =====
+function vibrateLight() { navigator.vibrate?.(10); }
+function vibrateMedium() { navigator.vibrate?.(25); }
+function vibrateSuccess() { navigator.vibrate?.([15, 50, 15]); }
+function vibrateError() { navigator.vibrate?.([30, 80, 30, 80, 30]); }
+
+// Hook haptics into key actions
+(function() {
+  document.addEventListener('pointerdown', e => {
+    const el = e.target?.closest('.nav-item,.filter-btn,.cat-chip,.genre-tag,.auth-tab');
+    if (el) vibrateLight();
+  });
+  document.addEventListener('pointerdown', e => {
+    const el = e.target?.closest('.btn-primary,.adm-save,.btn-read,.book-read-btn');
+    if (el) vibrateMedium();
+  });
+})();
+
+// ===== ANDROID SHARE API (replaces clipboard fallback) =====
+function shareBook(id) {
+  const b = BOOKS.find(x=>x.id===id) || WISHLIST.find(x=>x.id===id);
+  if (!b) return;
+  const shareData = {
+    title: b.title,
+    text: `Check out "${b.title}" by ${b.author} on Bangla Scan!`,
+    url: window.location.href
+  };
+  if (navigator.share && navigator.canShare?.(shareData)) {
+    vibrateMedium();
+    navigator.share(shareData).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(`"${b.title}" by ${b.author} — Bangla Scan`)
+      .then(() => showToast('📋 Copied to clipboard'));
+  } else {
+    showToast('📋 ' + b.title + ' by ' + b.author);
+  }
+}
+
+// ===== NETWORK / OFFLINE STATUS =====
+(function() {
+  const banner = document.getElementById('offline-banner');
+  function setOnline() {
+    banner?.classList.remove('show');
+    document.getElementById('offline-banner-msg') && (document.getElementById('offline-banner-msg').textContent = '');
+  }
+  function setOffline() {
+    if (banner) {
+      banner.classList.add('show');
+      banner.textContent = '⚠️ You are offline — reading from cache';
+    }
+    showToast('📶 No internet connection');
+  }
+  window.addEventListener('online', setOnline);
+  window.addEventListener('offline', setOffline);
+  if (!navigator.onLine) setOffline();
+})();
+
+// ===== ANDROID DYNAMIC THEME-COLOR =====
+function updateAndroidThemeColor(theme) {
+  const colors = {
+    light: '#f0f2f8', dark: '#0a0d14',
+    midnight: '#040914', sakura: '#fff5f8', ocean: '#081c22'
+  };
+  const meta = document.querySelector('meta[name="theme-color"]:not([media])');
+  if (meta) meta.content = colors[theme] || '#7c3aed';
+}
+// Override setAppTheme to also update Android theme color
+const _origSetAppTheme = window.setAppTheme;
+if (typeof setAppTheme === 'function') {
+  window.setAppTheme = function(t) {
+    _origSetAppTheme?.(t);
+    updateAndroidThemeColor(t);
+  };
+}
+
+// ===== ANDROID KEYBOARD RESIZE FIX =====
+// Prevents layout jumping when Android soft keyboard opens
+(function() {
+  if (!window.visualViewport) return;
+  const vv = window.visualViewport;
+  vv.addEventListener('resize', () => {
+    const activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+      setTimeout(() => activeEl.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
+    }
+  });
 })();
 </script>
 </body>
