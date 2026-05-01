@@ -42,6 +42,7 @@
       --gradient-accent: linear-gradient(135deg,#7c3aed,#a78bfa);
       --gradient-card: linear-gradient(145deg, rgba(26,30,42,0.5), rgba(20,23,32,0.4));
       --gradient-progress: linear-gradient(90deg,#7c3aed,#06b6d4);
+      --bg-sidebar-solid: #10131c;
     }
     [data-theme="light"] {
       --bg-base: #f0f2f8; --bg-elevated: #ffffff; --bg-card: rgba(255, 255, 255, 0.6);
@@ -56,6 +57,7 @@
       --gradient-accent: linear-gradient(135deg,#7c3aed,#a78bfa);
       --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.7), rgba(248,249,254,0.5));
       --gradient-progress: linear-gradient(90deg,#7c3aed,#06b6d4);
+      --bg-sidebar-solid: #f5f5ff;
     }
     [data-theme="midnight"] {
       --bg-base: #040914; --bg-elevated: #0a1128; --bg-card: rgba(10, 17, 40, 0.45);
@@ -70,6 +72,7 @@
       --gradient-accent: linear-gradient(135deg,#4f46e5,#818cf8);
       --gradient-card: linear-gradient(145deg, rgba(10,17,40,0.5), rgba(8,12,28,0.4));
       --gradient-progress: linear-gradient(90deg,#4f46e5,#38bdf8);
+      --bg-sidebar-solid: #08102a;
     }
     [data-theme="sakura"] {
       --bg-base: #fff5f8; --bg-elevated: #ffffff; --bg-card: rgba(255, 240, 245, 0.6);
@@ -84,6 +87,7 @@
       --gradient-accent: linear-gradient(135deg,#f43f5e,#fb7185);
       --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.7), rgba(255,240,245,0.5));
       --gradient-progress: linear-gradient(90deg,#f43f5e,#fb7185);
+      --bg-sidebar-solid: #fff0f5;
     }
     [data-theme="ocean"] {
       --bg-base: #081c22; --bg-elevated: #0f2b33; --bg-card: rgba(15, 43, 51, 0.45);
@@ -98,6 +102,7 @@
       --gradient-accent: linear-gradient(135deg,#0ea5e9,#38bdf8);
       --gradient-card: linear-gradient(145deg, rgba(15,43,51,0.5), rgba(12,35,42,0.4));
       --gradient-progress: linear-gradient(90deg,#0ea5e9,#10b981);
+      --bg-sidebar-solid: #0a2028;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -108,7 +113,7 @@
     *:focus-visible{outline:2px solid var(--accent-1);outline-offset:2px;border-radius:4px;}
 
     .page{display:none; opacity:0; transform:scale(0.95) translateY(18px); transition:opacity 0.5s var(--ease), transform 0.5s var(--ease-spring);}
-    .page.active{display:flex; opacity:1; transform:scale(1) translateY(0);}
+    .page.active{display:flex; opacity:1; transform:none;}
 
     .liquid-glass{backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-border)!important;box-shadow:0 16px 40px rgba(0,0,0,0.15)!important;}
     .dashboard-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;}
@@ -214,7 +219,9 @@
     .nav-item.active .nav-icon{transform:scale(1.2);}
     .nav-badge{margin-left:auto;background:var(--accent-1);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:var(--r-full);animation:glowPulse 2s ease-in-out infinite;}
     .sidebar-bottom{padding:14px 8px;border-top:1px solid var(--divider);}
-    .main-content{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+    .main-content{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--t-normal) var(--ease);}
+    body.sidebar-collapsed { --sidebar-w: 0px !important; }
+    body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
     .topbar{position:sticky;top:0;z-index:50;background:var(--bg-overlay);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--glass-border);padding:0 28px;height:68px;display:flex;align-items:center;gap:16px;}
     .topbar-title{font-size:19px;font-weight:700;color:var(--text-primary);flex:1;}
     .search-bar{display:flex;align-items:center;gap:9px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-full);padding:9px 16px;width:280px;transition:all var(--t-fast) var(--ease);}
@@ -224,7 +231,7 @@
     .topbar-back{display:none;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-right:14px;padding:6px 12px;border-radius:var(--r-full);transition:all var(--t-fast) var(--ease);background:var(--bg-card);border:1px solid var(--border);}
     .topbar-back:hover{color:var(--accent-2);border-color:var(--border-accent);transform:translateX(-2px);box-shadow:var(--shadow-sm);}
     .topbar-actions{display:flex;align-items:center;gap:7px;}
-    .mobile-hamburger{display:none;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-right:12px;line-height:1;}
+    .mobile-hamburger{display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-right:12px;line-height:1;}
     .icon-btn{width:38px;height:38px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);font-size:17px;transition:all 0.25s var(--ease-spring);cursor:pointer;position:relative;}
     .icon-btn:hover{background:var(--bg-card-hover);color:var(--accent-2);border-color:var(--border-accent);transform:translateY(-2px) scale(1.1);box-shadow:var(--shadow-sm);}
     .icon-btn:active{transform:scale(0.92);}
@@ -244,7 +251,7 @@
     .hero-cta:hover::after{transform:translateX(100%);}
     .hero-cta:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 12px 36px rgba(124,58,237,0.75);}
     .hero-cta:active{transform:scale(0.97);}
-    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;}
     .stat-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-lg);padding:22px;transition:all var(--t-normal) var(--ease-spring);position:relative;overflow:hidden; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.1);}
     .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0;}
     .stat-card.violet::after{background:var(--gradient-accent);}
@@ -372,7 +379,7 @@
     .theme-option.light-opt{background:#f5f6fa;border-color:var(--border);}
     .theme-option.selected{border-color:var(--accent-1);box-shadow:0 0 0 2px rgba(124,58,237,0.3);}
     .profile-avatar-big{width:76px;height:76px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:white;margin:0 auto 14px;box-shadow:0 0 0 4px rgba(124,58,237,0.3);}
-    .stats-page-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:22px;}
+    .stats-page-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;margin-bottom:22px;}
     .big-stat-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-xl);padding:26px;text-align:center; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.15);}
     .tab-content{display:none;}
     .tab-content.active{display:block;animation:fadeInUp 0.4s var(--ease-spring) both;}
@@ -513,11 +520,11 @@
     .streak-day.today{animation:glowPulse 1.5s ease-in-out infinite;}
     /* ===== FLUID ADAPTIVE LAYOUT ===== */
     /* Large Desktop 1400px+ */
-    @media(min-width:1400px){.content-area{padding:32px 36px;}.books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}.stats-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(min-width:1400px){.content-area{padding:32px 36px;}.books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}}
     /* Standard Desktop 1100-1400px */
     @media(max-width:1400px) and (min-width:1101px){.books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}}
     /* Small Desktop / Large Tablet 1024-1100px */
-    @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr);}.dashboard-grid{grid-template-columns:1fr;}}
+    @media(max-width:1100px){.dashboard-grid{grid-template-columns:1fr;}}
     /* Tablet 768-1024px */
     @media(max-width:1024px) and (min-width:768px){
       :root{--sidebar-w:84px;}
@@ -531,13 +538,19 @@
     /* Mobile 480-767px */
     @media(max-width:767px){
       :root{--sidebar-w:0px;}
-      .sidebar{transform:translateX(-260px);width:260px;z-index:1000;}
+      .sidebar{
+        transform:translateX(-260px);width:260px;z-index:1000;
+        /* Solid bg on mobile — no backdrop-filter blurring the content */
+        background:var(--bg-sidebar-solid, #12152a) !important;
+        backdrop-filter:none !important;
+        -webkit-backdrop-filter:none !important;
+        box-shadow:none;
+      }
       .sidebar.open{transform:translateX(0);box-shadow:0 0 60px rgba(0,0,0,0.6);}
       .mobile-hamburger{display:flex;}
       .topbar-back.show-back{display:flex;}
       .main-content{margin-left:0!important;}
       .settings-grid{grid-template-columns:1fr;}
-      .stats-page-grid{grid-template-columns:1fr 1fr;}
       .books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
       .book-card{font-size:12px;}
       .hero-greeting{flex-direction:column;gap:12px;}
@@ -562,8 +575,7 @@
       .login-art{padding:36px 20px;min-height:200px;}
       .login-form-panel{width:100%;padding:28px 18px;}
       .content-area{padding:12px;}
-      .stats-page-grid{grid-template-columns:1fr;}
-      .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+      .stats-grid{gap:10px;}
       .stat-card{padding:14px 12px;}
       .stat-value{font-size:28px;}
       .reader-content{padding:44px 14px 80px;}
@@ -600,13 +612,15 @@
     .adm-back{padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--text-secondary);cursor:pointer;background:transparent;transition:all .2s;}
     .adm-back:hover{color:var(--accent-2);border-color:var(--border-accent);}
     .adm-layout{display:flex;min-height:100vh;padding-top:56px;}
-    .adm-sidebar{width:210px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;padding:16px 0;}
+    .adm-sidebar{width:210px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;padding:16px 0;transition:transform var(--t-fast) var(--ease);}
     .adm-nav-sec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);padding:0 16px;margin:14px 0 5px;}
     .adm-nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
     .adm-nav-item:hover{background:var(--bg-card-hover);color:var(--accent-2);}
     .adm-nav-item.active{background:var(--bg-card-hover);color:var(--accent-2);border-left-color:var(--accent-1);font-weight:600;}
     .adm-nav-ic{font-size:15px;width:18px;text-align:center;}
-    .adm-main{margin-left:210px;flex:1;padding:24px;}
+    .adm-main{margin-left:210px;flex:1;padding:24px;transition:margin-left var(--t-fast) var(--ease);}
+    body.adm-sidebar-collapsed .adm-sidebar { transform: translateX(-100%); }
+    body.adm-sidebar-collapsed .adm-main { margin-left: 0; }
     .adm-sec{display:none;animation:fadeInUp .35s ease both;}
     .adm-sec.active{display:block;}
     .adm-title{font-size:20px;font-weight:800;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
@@ -688,9 +702,11 @@
     .adm-progress{height:4px;background:var(--bg-input);border-radius:999px;overflow:hidden;}
     .adm-progress-fill{height:100%;border-radius:999px;background:var(--gradient-progress);}
     .adm-stat-number{font-size:13px;font-weight:700;color:var(--text-primary);}
-    .adm-hamburger{display:none;align-items:center;justify-content:center;font-size:20px;cursor:pointer;padding:0 10px;margin-right:5px;}
+    .adm-hamburger{display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;padding:0 10px;margin-right:5px;}
     .adm-table-wrap{width:100%;overflow-x:auto;}
-    @media(max-width:900px){.adm-kpi-grid{grid-template-columns:repeat(2,1fr);}.adm-grid2{grid-template-columns:1fr;}.adm-sett-grid{grid-template-columns:1fr;}.adm-sidebar{transform:translateX(-210px);transition:transform var(--t-fast) var(--ease);z-index:250;display:block;}.adm-sidebar.open{transform:translateX(0);}.adm-main{margin-left:0;}.adm-hamburger{display:flex;}}
+    @media(max-width:900px){.adm-kpi-grid{grid-template-columns:repeat(2,1fr);}.adm-grid2{grid-template-columns:1fr;}.adm-sett-grid{grid-template-columns:1fr;}.adm-sidebar{transform:translateX(-100%);z-index:250;}.adm-sidebar.open{transform:translateX(0);}.adm-main{margin-left:0;}.adm-hamburger{display:flex;}}
+    body.adm-sidebar-collapsed .adm-sidebar{transform:translateX(-100%);}
+    body.adm-sidebar-collapsed .adm-main{margin-left:0;}
   </style>
 </head>
 <body>
@@ -782,10 +798,12 @@
       <div class="nav-item" onclick="goToLogin()" style="color:var(--accent-danger)"><span class="nav-icon">🚪</span>Log Out</div>
     </div>
   </aside>
+  <!-- Overlay INSIDE page-dashboard = same stacking context as sidebar, so z-index works correctly -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <div class="main-content">
     <div class="topbar">
-      <div class="mobile-hamburger" onclick="toggleSidebar()">☰</div>
+      <div class="mobile-hamburger" onclick="toggleSidebar(event)">☰</div>
       <div class="topbar-back" id="topbar-back-btn" onclick="navTo('home')" style="display:none;">← Back</div>
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="search-bar">
@@ -806,8 +824,10 @@
           <span style="font-size:18px">📢</span> <span id="dash-broadcast-text"></span>
         </div>
 
-        <!-- MY LIBRARY AT TOP -->
-        <div class="animate-in d1">
+        <div class="dashboard-grid">
+          <div class="dashboard-main">
+            <!-- MY LIBRARY -->
+            <div class="animate-in d1">
           <div class="section-header" style="margin-bottom:10px">
             <div class="section-title">📚 My Library</div>
             <div class="section-action" onclick="navTo('library')">View All →</div>
@@ -833,38 +853,45 @@
         <!-- CATEGORY SHELVES -->
         <div id="category-shelves" class="animate-in d3"></div>
 
-        <!-- QUICK STATS + SIDE PANEL -->
-        <div class="dashboard-grid animate-in d3">
-          <div>
-            <div class="hero-greeting" style="margin-bottom:20px">
-              <div class="hero-text">
-                <div class="hero-sub" id="greeting-time">Good evening ✨</div>
-                <div class="hero-title">Welcome back, <span id="hero-name">Alex</span>!</div>
-                <div class="hero-desc">You're on a 7-day reading streak 🔥 Keep it going and finish your current book this week.</div>
-              </div>
-              <button class="hero-cta" onclick="openBook(0)">📖 Continue Reading</button>
-            </div>
-            <div class="stats-grid">
-              <div class="stat-card violet"><div class="stat-icon violet">📚</div><div class="stat-value" id="dash-stat-books">0</div><div class="stat-label">Books Read</div><div class="stat-change up">This month</div></div>
-              <div class="stat-card cyan"><div class="stat-icon cyan">📄</div><div class="stat-value" id="dash-stat-pages">0</div><div class="stat-label">Pages Read</div><div class="stat-change up">This week</div></div>
-              <div class="stat-card amber"><div class="stat-icon amber">🔥</div><div class="stat-value" id="dash-stat-streak">0</div><div class="stat-label">Day Streak</div><div class="stat-change neutral" id="dash-stat-best">Best: 0</div></div>
-              <div class="stat-card pink"><div class="stat-icon pink">⏱️</div><div class="stat-value" id="dash-stat-hours">0</div><div class="stat-label">Hours Read</div><div class="stat-change up">Total</div></div>
-            </div>
+        <!-- WELCOME GREETING -->
+        <div class="hero-greeting animate-in d3" style="margin-top:28px;margin-bottom:0px">
+          <div class="hero-text">
+            <div class="hero-sub" id="greeting-time">Good evening ✨</div>
+            <div class="hero-title">Welcome back, <span id="hero-name">Alex</span>!</div>
+            <div class="hero-desc">You're on a 7-day reading streak 🔥 Keep it going and finish your current book this week.</div>
+          </div>
+          <button class="hero-cta" onclick="openBook(0)">📖 Continue Reading</button>
+        </div>
+
+        <!-- READING STATS -->
+        <div class="stats-grid animate-in d3" style="margin-top:20px">
+          <div class="stat-card violet"><div class="stat-icon violet">📚</div><div class="stat-value" id="dash-stat-books">0</div><div class="stat-label">Books Read</div><div class="stat-change up">This month</div></div>
+          <div class="stat-card cyan"><div class="stat-icon cyan">📄</div><div class="stat-value" id="dash-stat-pages">0</div><div class="stat-label">Pages Read</div><div class="stat-change up">This week</div></div>
+          <div class="stat-card amber"><div class="stat-icon amber">🔥</div><div class="stat-value" id="dash-stat-streak">0</div><div class="stat-label">Day Streak</div><div class="stat-change neutral" id="dash-stat-best">Best: 0</div></div>
+          <div class="stat-card pink"><div class="stat-icon pink">⏱️</div><div class="stat-value" id="dash-stat-hours">0</div><div class="stat-label">Hours Read</div><div class="stat-change up">Total</div></div>
+        </div>
           </div>
           <div class="sidebar-panel">
-            <div class="panel-card streak-card">
-              <div class="panel-card-header"><div class="panel-card-icon streak-bg">🔥</div><div class="panel-card-label">Reading Streak</div></div>
-              <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div class="streak-flame" style="font-size:36px">🔥</div><div><div class="streak-number" id="side-streak" style="font-size:32px;font-weight:900;line-height:1;">0</div><div class="streak-label" style="font-size:12px;color:var(--text-muted);margin-top:2px;">Day Streak</div></div></div>
-              <div class="streak-days" id="streak-days"></div>
-            </div>
-            <div class="panel-card">
-              <div class="panel-card-header"><div class="panel-card-icon chart-bg">📊</div><div class="panel-card-label">Weekly Pages</div></div>
-              <div class="chart-container" id="weekly-chart"></div>
-            </div>
-            <div class="panel-card">
-              <div class="panel-card-header"><div class="panel-card-icon activity-bg">⚡</div><div class="panel-card-label">Recent Activity</div></div>
-              <div class="activity-list" id="activity-list"></div>
-            </div>
+
+        <!-- READING STREAK -->
+        <div class="panel-card animate-in d3" style="margin-top:0">
+          <div class="panel-card-header"><div class="panel-card-icon streak-bg">🔥</div><div class="panel-card-label">Reading Streak</div></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div style="font-size:36px">🔥</div><div><div id="side-streak" style="font-size:32px;font-weight:900;line-height:1;color:var(--text-primary)">0</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Day Streak</div></div></div>
+          <div class="streak-days" id="streak-days"></div>
+        </div>
+
+        <!-- WEEKLY PAGES -->
+        <div class="panel-card animate-in d3" style="margin-top:0">
+          <div class="panel-card-header"><div class="panel-card-icon chart-bg">📊</div><div class="panel-card-label">Weekly Pages</div></div>
+          <div class="chart-container" id="weekly-chart"></div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="panel-card animate-in d3" style="margin-top:0;margin-bottom:0">
+          <div class="panel-card-header"><div class="panel-card-icon activity-bg">⚡</div><div class="panel-card-label">Recent Activity</div></div>
+          <div class="activity-list" id="activity-list"></div>
+        </div>
+
           </div>
         </div>
 
@@ -933,7 +960,7 @@
           </div>
           <div class="settings-card">
             <div class="settings-title">🎨 Appearance</div>
-            <div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-desc">App localization</div></div><select id="app-language" onchange="showToast('Language updated')" style="background:var(--bg-input);color:var(--text-primary);border:1px solid var(--border);padding:6px 10px;border-radius:var(--r-sm);font-family:inherit;font-size:12px;outline:none;"><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
+            <div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-desc">App localization</div></div><select id="app-language" onchange="showToast('Language updated')" style="background:var(--bg-input);color:var(--text-primary);border:1px solid var(--border);padding:6px 10px;border-radius:var(--r-sm);font-family:inherit;font-size:12px;outline:none;"><option value="en">English</option><option value="bn">Bangla</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
             <div class="setting-row"><div><div class="setting-label">App Theme</div><div class="setting-desc">Color scheme</div></div><div class="theme-switcher"><div class="theme-option dark-opt" id="theme-opt-dark" onclick="setAppTheme('dark')" title="Dark"></div><div class="theme-option light-opt selected" id="theme-opt-light" onclick="setAppTheme('light')" title="Light"></div><div class="theme-option midnight-opt" id="theme-opt-midnight" onclick="setAppTheme('midnight')" title="Midnight"></div><div class="theme-option sakura-opt" id="theme-opt-sakura" onclick="setAppTheme('sakura')" title="Sakura"></div><div class="theme-option ocean-opt" id="theme-opt-ocean" onclick="setAppTheme('ocean')" title="Ocean"></div></div></div>
             <div class="setting-row"><div><div class="setting-label">Reading Reminders</div><div class="setting-desc">Daily push notifications</div></div><div class="toggle on" id="toggle-reminders" onclick="toggleSetting('reminders')"></div></div>
             <div class="setting-row"><div><div class="setting-label">Auto-save Progress</div><div class="setting-desc">Save position automatically</div></div><div class="toggle on" id="toggle-autosave" onclick="toggleSetting('autosave')"></div></div>
@@ -1527,7 +1554,19 @@ function animateValue(id, start, end, duration, suffix="") {
   window.requestAnimationFrame(step);
 }
 function updateGreeting(){const h=new Date().getHours();document.getElementById("greeting-time").textContent=h<12?"Good morning ☀️":h<17?"Good afternoon 👋":"Good evening ✨";}
-function toggleSidebar() { document.getElementById('sidebar')?.classList.toggle('open'); }
+function toggleSidebar(e) { 
+  if(e) e.stopPropagation();
+  if(window.innerWidth <= 767) {
+    document.getElementById('sidebar')?.classList.toggle('open');
+    document.getElementById('sidebar-overlay')?.classList.toggle('active');
+  } else {
+    document.body.classList.toggle('sidebar-collapsed');
+  }
+}
+function closeSidebar() {
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sidebar-overlay')?.classList.remove('active');
+}
 function navTo(s){
   ["home","library","stats","wishlist","explore","trending","settings"].forEach(t=>{
     document.getElementById("tab-"+t)?.classList.toggle("active",t===s);
@@ -1541,7 +1580,7 @@ function navTo(s){
     else backBtn.classList.add('show-back');
     backBtn.style.display = '';
   }
-  document.getElementById('sidebar')?.classList.remove('open');
+  closeSidebar();
   window.scrollTo(0,0);
 }
 
@@ -2773,9 +2812,6 @@ enter();
   </div>
 </div>
 
-<!-- Sidebar overlay tap-to-close -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-
 <!-- PWA Install Banner -->
 <div id="pwa-install-banner" style="display:none;position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:9999;background:var(--gradient-accent);color:white;padding:12px 20px;border-radius:var(--r-full);font-weight:700;font-size:13px;box-shadow:var(--shadow-lg);display:none;align-items:center;gap:12px;white-space:nowrap;">
   <span>📲 Install Bangla Scan</span>
@@ -2810,14 +2846,6 @@ function triggerPWAInstall() {
 function openSidebar() {
   document.getElementById('sidebar')?.classList.add('open');
   document.getElementById('sidebar-overlay')?.classList.add('active');
-}
-function closeSidebar() {
-  document.getElementById('sidebar')?.classList.remove('open');
-  document.getElementById('sidebar-overlay')?.classList.remove('active');
-}
-function toggleSidebar() {
-  const open = document.getElementById('sidebar')?.classList.contains('open');
-  open ? closeSidebar() : openSidebar();
 }
 
 // ===== SWIPE GESTURE NAVIGATION =====

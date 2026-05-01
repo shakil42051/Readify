@@ -1,4 +1,4 @@
-﻿// ===================== ADMIN PANEL =====================
+// ===================== ADMIN PANEL =====================
 const ADMIN_EMAIL = "admin@Bangla Scan.io";
 let adminPassword = "admin2024";
 let admLogs = [];
@@ -408,4 +408,23 @@ function admNukeAllData(){
     showToast('&#x1F4A5; All data cleared. Reloading...');
     setTimeout(()=>location.reload(),1500);
   });
+}
+
+function admToggleSidebar(e) {
+  if (e) e.stopPropagation();
+  if (window.innerWidth <= 900) {
+    document.querySelector('.adm-sidebar')?.classList.toggle('open');
+  } else {
+    document.body.classList.toggle('adm-sidebar-collapsed');
+  }
+}
+
+function admAutoCloseSidebar(e) {
+  if (window.innerWidth > 900) {
+    if (!document.body.classList.contains('adm-sidebar-collapsed')) {
+      document.body.classList.add('adm-sidebar-collapsed');
+    }
+  } else {
+    document.querySelector('.adm-sidebar')?.classList.remove('open');
+  }
 }
