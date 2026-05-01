@@ -1,0 +1,157 @@
+/* ===== 1. FLUID BASE & FIXED WIDTH FIXES ===== */
+/* Convert fixed widths to fluid max-widths */
+.login-form-panel {
+  width: 100%;
+  max-width: 460px;
+  padding: 30px 20px; /* Scaled down base padding */
+  margin: 0 auto;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 280px;
+}
+
+.reader-content {
+  width: 100%;
+  max-width: 700px;
+  padding: 30px 16px 80px; /* Mobile-friendly reading padding */
+  margin: 0 auto;
+}
+
+/* Base mobile grid configurations */
+.books-grid, .library-grid, .explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); /* Fits 2-3 books on small phones */
+  gap: 12px;
+}
+
+.stats-grid, .stats-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Stack vertically on mobile */
+  gap: 16px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* ===== 2. MOBILE-FIRST BREAKPOINTS ===== */
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .login-form-panel {
+    padding: 60px 50px;
+  }
+  
+  .reader-content {
+    padding: 56px 36px 120px;
+  }
+
+  .books-grid, .library-grid, .explore-grid {
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 18px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 320px; /* Content + Side Panel */
+    gap: 22px;
+  }
+
+  .books-grid, .library-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  
+  .content-area {
+    padding: 28px 32px;
+  }
+}
+
+/* ===== 3. MOBILE NAVIGATION & OVERFLOW FIXES ===== */
+/* Hide desktop sidebar on mobile, show hamburger */
+@media (max-width: 767px) {
+  :root {
+    --sidebar-w: 0px; /* Collapse sidebar variable */
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+    width: 260px;
+    z-index: 1000;
+    background: var(--bg-sidebar-solid, #12152a) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+  
+  .mobile-hamburger {
+    display: flex;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+    width: 100vw;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+
+  .topbar {
+    padding: calc(env(safe-area-inset-top) + 4px) 14px 0;
+    height: calc(54px + env(safe-area-inset-top));
+    gap: 8px;
+  }
+  
+  .search-bar {
+    display: none; /* Hide search bar on small mobile headers to save space */
+  }
+  
+  .continue-reading-card {
+    flex-direction: column; /* Stack image and text */
+    text-align: center;
+  }
+  
+  .cr-actions {
+    justify-content: center;
+  }
+}
+
+/* ===== 4. ADMIN PANEL RESPONSIVENESS ===== */
+.adm-grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .adm-grid2 {
+    grid-template-columns: 3fr 2fr;
+  }
+  .adm-sidebar {
+    transform: translateX(0);
+  }
+  .adm-hamburger {
+    display: none;
+  }
+}
