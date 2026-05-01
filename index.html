@@ -1,572 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <!-- ═══════════════════════════════════════════════════════
-       CROSS-BROWSER & CROSS-DEVICE COMPATIBILITY
-       Supports: Chrome, Firefox, Safari, Edge, Samsung Internet,
-                 iOS Safari, Android Chrome, macOS, Windows
-  ═══════════════════════════════════════════════════════ -->
   <meta charset="UTF-8" />
-  <!-- Viewport: prevents horizontal scroll on mobile, allows user scaling for accessibility -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <!-- IE compatibility (legacy) -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  <title>Readify — Your Premium Reading Experience</title>
-  <meta name="description" content="Readify is a premium book reading platform. Track your library, reading progress, and enjoy a distraction-free reader page." />
-
-  <!-- PWA / iOS Safari home screen -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Readify" />
-  <meta name="mobile-web-app-capable" content="yes" />
-
-  <!-- Theme color for Android Chrome browser chrome & Samsung Internet -->
-  <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#f0f2f8" media="(prefers-color-scheme: light)" />
-
-  <!-- Open Graph / Social sharing -->
-  <meta property="og:title" content="Readify — Your Premium Reading Experience" />
-  <meta property="og:description" content="Track your library, reading progress, and enjoy a distraction-free reading experience." />
-  <meta property="og:type" content="website" />
-
-  <!-- Fonts with display=swap for performance across all browsers -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangla Scan — Your Premium Reading Experience</title>
+  <meta name="description" content="Bangla Scan is a premium book reading platform. Track your library, reading progress, and enjoy a distraction-free reader page." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet" />
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
-    /* ═══════════════════════════════════════════════════════════
-       CROSS-BROWSER RESETS & FIXES
-       Covers: Safari (iOS/macOS), Chrome (Android/Desktop),
-               Firefox, Edge, Samsung Internet, Opera Mini
-    ═══════════════════════════════════════════════════════════ */
-
-    /* Normalize box model universally */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-    }
-
-    /* iOS Safari: prevent font size inflation on rotation */
-    html {
-      -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-
-    /* iOS Safari: safe area insets for notched/Dynamic Island devices */
-    body {
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
-    }
-
-    /* iOS Safari: remove tap highlight on interactive elements */
-    a, button, input, select, textarea, [role="button"], [onclick] {
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-    }
-
-    /* iOS Safari: prevent callout (long press menu) on non-input elements */
-    img, .book-card, .nav-item, .stat-card {
-      -webkit-touch-callout: none;
-    }
-
-    /* Firefox: remove default button styles */
-    button::-moz-focus-inner {
-      border: 0;
-      padding: 0;
-    }
-
-    /* Firefox: fix input appearance */
-    input, textarea, select {
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    /* Safari: fix number input spinners */
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type="number"] { -moz-appearance: textfield; }
-
-    /* Safari: fix search input */
-    input[type="search"]::-webkit-search-decoration,
-    input[type="search"]::-webkit-search-cancel-button {
-      -webkit-appearance: none;
-    }
-
-    /* iOS Safari: prevent zoom on input focus (font-size must be >= 16px) */
-    input[type="text"], input[type="email"], input[type="password"],
-    input[type="number"], input[type="search"], textarea, select {
-      font-size: 16px;
-    }
-
-    /* Fix iOS Safari momentum scrolling in scroll containers */
-    .sidebar, .adm-sidebar, .modal-box, .reader-body {
-      -webkit-overflow-scrolling: touch;
-      overflow-y: auto;
-    }
-
-    /* Backdrop-filter: prefixed for Safari & older Chrome */
-    .liquid-glass,
-    .sidebar,
-    .topbar,
-    .login-form-panel,
-    .continue-reading-card,
-    .stat-card,
-    .panel-card,
-    .settings-card,
-    .big-stat-card,
-    #audio-player,
-    .modal-box,
-    .adm-top {
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      backdrop-filter: blur(24px) saturate(180%);
-    }
-
-    /* Firefox doesn't support backdrop-filter — provide solid fallback */
-    @supports not (backdrop-filter: blur(1px)) {
-      .sidebar { background: var(--bg-elevated) !important; }
-      .topbar { background: var(--bg-elevated) !important; }
-      .login-form-panel { background: var(--bg-elevated) !important; }
-      .liquid-glass { background: var(--bg-elevated) !important; }
-      .panel-card { background: var(--bg-elevated) !important; }
-      .settings-card { background: var(--bg-elevated) !important; }
-      .big-stat-card { background: var(--bg-elevated) !important; }
-      #audio-player { background: var(--bg-elevated) !important; }
-      .modal-box { background: var(--bg-elevated) !important; }
-      .adm-top { background: var(--bg-elevated) !important; }
-    }
-
-    /* Safari: -webkit-background-clip text (gradient text) */
-    .login-logo-big, .login-form-logo, .sidebar-logo,
-    .hero-title span, .adm-title, .adm-logo {
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Edge / IE: fallback for CSS Grid gap shorthand */
-    .stats-grid, .dashboard-grid, .books-grid,
-    .library-grid, .settings-grid, .stats-page-grid,
-    .adm-kpi-grid, .adm-grid2, .adm-books-grid, .adm-sett-grid {
-      grid-gap: 16px; /* legacy */
-    }
-
-    /* Prevent horizontal overflow globally on all devices */
-    html, body { max-width: 100%; overflow-x: hidden; }
-
-    /* Smooth scrolling — with reduced-motion override for accessibility */
-    html { scroll-behavior: smooth; }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-
-    /* Custom scrollbar — hidden on Firefox & iOS (graceful) */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 9999px; }
-
-    /* Touch-action: allow smooth panning on touch devices */
-    .books-grid, .library-grid, .adm-table-wrap {
-      touch-action: pan-x pan-y;
-    }
-
-    /* Make clickable items easier to tap on mobile (min 44×44px touch target) */
-    .nav-item, .icon-btn, .btn-primary, .btn-read, .btn-outline,
-    .hero-cta, .auth-tab, .filter-btn, .genre-tag,
-    .adm-nav-item, .adm-filter, .adm-save, .adm-act-btn {
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Restore non-flex layouts for elements that need it */
-    .nav-item { justify-content: flex-start; }
-    .adm-nav-item { justify-content: flex-start; }
-    .adm-filter, .genre-tag, .filter-btn { min-height: 36px; }
-
-    /* ═══════════════════════════════════════════════════════════
-       MOBILE-FIRST RESPONSIVE ENHANCEMENTS
-       (supplements existing breakpoints)
-    ═══════════════════════════════════════════════════════════ */
-
-    /* === Mobile hamburger button for main sidebar === */
-    .mobile-menu-btn {
-      display: none;
-      position: fixed;
-      top: 14px;
-      left: 14px;
-      z-index: 200;
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--glass-border);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      font-size: 18px;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-primary);
-      -webkit-tap-highlight-color: transparent;
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Sidebar overlay backdrop for mobile */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      top: 0; right: 0; bottom: 0; left: 0; /* Android: avoid inset shorthand */
-      background: rgba(0,0,0,0.55);
-      z-index: 99;
-    }
-    .sidebar-overlay.visible { display: block; }
-
-    @media (max-width: 767px) {
-      .mobile-menu-btn { display: flex; }
-
-      /* Push topbar title right to clear the hamburger */
-      .topbar { padding-left: 64px; }
-
-      /* Slide-in sidebar */
-      .sidebar {
-        transform: translateX(-260px);
-        -webkit-transform: translateX(-260px);
-        width: 260px;
-        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-        -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.4,0,0.2,1);
-      }
-      .sidebar.open {
-        transform: translateX(0);
-        -webkit-transform: translateX(0);
-      }
-
-      /* Full-width main content on mobile */
-      .main-content { margin-left: 0 !important; }
-
-      /* Stack hero greeting vertically on small screens */
-      .hero-greeting {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 22px 18px;
-      }
-
-      /* Stack continue reading card */
-      .continue-reading-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-      .cr-book-cover { width: 70px; height: 100px; }
-
-      /* Stat cards: 2 cols on mobile */
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-
-      /* Dashboard grid: single col */
-      .dashboard-grid { grid-template-columns: 1fr; }
-
-      /* Book grids: 2 cols on phones */
-      .books-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .library-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-
-      /* Settings: single col */
-      .settings-grid { grid-template-columns: 1fr; }
-      .stats-page-grid { grid-template-columns: 1fr; }
-
-      /* Audio player: full width on mobile */
-      #audio-player {
-        left: 12px;
-        right: 12px;
-        width: auto;
-        bottom: calc(12px + env(safe-area-inset-bottom));
-      }
-
-      /* Content padding */
-      .content-area { padding: 14px; }
-
-      /* Reader text area */
-      .reader-content { padding: 32px 16px 120px !important; }
-
-      /* Login: stack vertically */
-      #page-login { flex-direction: column; }
-      .login-art { min-height: 220px; padding: 32px 20px; }
-      .login-form-panel { width: 100%; padding: 28px 20px; border-left: none; border-top: 1px solid var(--glass-border); }
-      .login-stats { gap: 20px; }
-
-      /* Modal: full-screen feel on small phones */
-      .modal-overlay { padding: 12px; align-items: flex-end; }
-      .modal-box { max-width: 100% !important; max-height: 90vh; overflow-y: auto; border-radius: 20px 20px 0 0; }
-
-      /* Search bar: full width */
-      .search-bar { width: 100%; max-width: none; }
-
-      /* Topbar: compact */
-      .topbar-title { font-size: 15px; }
-      .topbar { height: 58px; padding-right: 12px; }
-    }
-
-    /* === Tablet (768px–1023px) === */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .dashboard-grid { grid-template-columns: 1fr; }
-      .content-area { padding: 20px 22px; }
-      .settings-grid { grid-template-columns: 1fr; }
-      .books-grid { grid-template-columns: repeat(3, 1fr); }
-      .library-grid { grid-template-columns: repeat(3, 1fr); }
-      #audio-player { width: 280px; }
-    }
-
-    /* === Large phones (portrait) & small tablets === */
-    @media (max-width: 480px) {
-      .books-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .hero-title { font-size: 20px; }
-      .hero-cta { padding: 10px 18px; font-size: 13px; }
-      .login-logo-big { font-size: 38px; }
-      .login-tagline { font-size: 14px; }
-      .login-art-books .art-book { width: 56px; height: 80px; }
-    }
-
-    /* === Very small phones (320px) === */
-    @media (max-width: 359px) {
-      .books-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stat-value { font-size: 22px; }
-      .content-area { padding: 10px; }
-    }
-
-    /* === Print styles === */
-    @media print {
-      .sidebar, .topbar, #audio-player, .mobile-menu-btn { display: none !important; }
-      .main-content { margin-left: 0 !important; }
-      body { background: white !important; color: black !important; }
-    }
-
-    /* === High-DPI / Retina displays === */
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      .book-cover-wrap img { image-rendering: -webkit-optimize-contrast; }
-    }
-
-    /* === Dark mode OS preference (auto-applies before JS theme loads) === */
-    @media (prefers-color-scheme: dark) {
-      html:not([data-theme]) {
-        --bg-base: #0a0d14; --bg-elevated: #141720; --bg-card: rgba(26, 30, 42, 0.45);
-        --text-primary: #f0f2f8; --text-secondary: #8892b0;
-      }
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       ANDROID BROWSER SPECIFIC FIXES
-       Covers: Chrome for Android, Samsung Internet, Android WebView,
-               older Android (5.0+), Chromium-based Android browsers
-    ═══════════════════════════════════════════════════════════ */
-
-    /* Android WebView / older Chrome: replace all inset: shorthand
-       with explicit top/right/bottom/left (inset not supported < Chrome 87) */
-    .hero-greeting::before {
-      top: -60px; right: -60px; bottom: auto; left: auto;
-      position: absolute;
-    }
-    .hero-greeting::after {
-      bottom: -40px; left: -40px; top: auto; right: auto;
-      position: absolute;
-    }
-
-    /* Android: aspect-ratio not supported before Chrome 88.
-       Use padding-top hack as fallback for book covers */
-    @supports not (aspect-ratio: 2/3) {
-      .book-cover-wrap {
-        height: 0;
-        padding-top: 150%; /* 2:3 ratio = 150% */
-        position: relative;
-      }
-      .book-cover-wrap img {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .streak-day {
-        width: 100%;
-        height: 36px; /* fallback fixed height instead of aspect-ratio:1 */
-        aspect-ratio: unset;
-      }
-    }
-
-    /* Android: overflow:hidden on fixed elements can glitch — use clip instead */
-    @media (max-width: 767px) {
-      .sidebar {
-        /* Android Chrome: will-change promotes to compositor layer for smooth animation */
-        will-change: transform;
-        -webkit-transform: translateX(-260px);
-        transform: translateX(-260px);
-        /* Solid background fallback for Android (no backdrop-filter support) */
-        background: var(--bg-elevated) !important;
-        /* Ensure sidebar renders above overlay */
-        z-index: 150;
-      }
-      .sidebar.open {
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
-      }
-    }
-
-    /* Android: backdrop-filter not supported below Chrome 76 */
-    @supports not (-webkit-backdrop-filter: blur(1px)) {
-      .topbar { background: var(--bg-elevated) !important; opacity: 0.97; }
-      .sidebar { background: var(--bg-elevated) !important; }
-      .adm-top { background: var(--bg-elevated) !important; }
-      .login-form-panel { background: var(--bg-elevated) !important; }
-      .continue-reading-card { background: var(--bg-elevated) !important; }
-      .stat-card { background: var(--bg-elevated) !important; }
-      .panel-card { background: var(--bg-elevated) !important; }
-      .settings-card { background: var(--bg-elevated) !important; }
-      .big-stat-card { background: var(--bg-elevated) !important; }
-      #audio-player { background: var(--bg-elevated) !important; }
-      .modal-box { background: var(--bg-elevated) !important; }
-    }
-
-    /* Android: CSS variable with rgba() inside background can fail on very old WebView.
-       Provide solid color fallback values */
-    @supports not (color: rgba(0,0,0,0)) {
-      .bg-card { background: #1a1e2a; }
-      .sidebar { background: #141720; }
-    }
-
-    /* Android: transform3d for GPU acceleration of animated orbs (prevents jank) */
-    .orb, .orb-dash-1, .orb-dash-2, .orb-dash-3 {
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      /* Android low-end: reduce blur cost */
-      will-change: transform;
-    }
-
-    /* Android low RAM: disable heavy blur on orbs for performance */
-    @media (max-width: 767px) {
-      .orb, .orb-dash-1, .orb-dash-2, .orb-dash-3 {
-        filter: blur(60px) !important; /* reduced from 110–130px */
-        opacity: 0.12 !important;
-      }
-    }
-
-    /* Android Chrome: fix flexbox gap not supported before Chrome 84 */
-    @supports not (gap: 1px) {
-      .sidebar-nav .nav-item + .nav-item { margin-top: 2px; }
-      .stats-grid > * + * { margin-left: 16px; }
-      .cr-actions { margin-top: 14px; }
-      .cr-actions .btn-read { margin-right: 10px; }
-      .topbar-actions > * + * { margin-left: 7px; }
-      .auth-tabs .auth-tab + .auth-tab { margin-left: 4px; }
-      .genre-tags .genre-tag { margin: 0 4px 6px 0; }
-      .library-controls .filter-btn { margin: 0 6px 6px 0; }
-    }
-
-    /* Android: ensure inputs don't overflow their containers */
-    input, textarea, select {
-      max-width: 100%;
-      min-width: 0; /* fix flexbox shrink bug on Android */
-    }
-
-    /* Android Chrome: fix sticky topbar sometimes disappearing on scroll */
-    .topbar {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      /* Force GPU composite layer */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-
-    /* Android: touch events — prevent passive listener warning and improve scroll */
-    html {
-      touch-action: manipulation; /* disables double-tap zoom, improves tap latency */
-    }
-
-    /* Android Samsung Internet: fix gradient text not rendering */
-    @media screen and (-webkit-min-device-pixel-ratio: 0) {
-      .login-logo-big, .login-form-logo, .sidebar-logo,
-      .hero-title span, .adm-title, .adm-logo {
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        /* Samsung Internet fallback if clip fails */
-        color: transparent;
-      }
-    }
-
-    /* Android: fix modal overlay not covering full screen on some devices */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0; /* explicit instead of inset */
-      width: 100%;
-      height: 100%;
-      /* Android: use 100% not 100vh to avoid browser-chrome-height bug */
-    }
-
-    /* Android: fix progress bar not rendering in some WebViews */
-    .progress-fill, .book-progress-fill, .adm-progress-fill,
-    .ap-progress-fill, .dl-progress-fill {
-      display: block;
-      min-width: 0;
-      /* Android: explicit height needed when parent uses flex */
-      height: 100%;
-    }
-
-    /* Android: fix border-radius on overflow:hidden elements */
-    .book-cover-wrap, .art-book, .modal-box, .stat-card {
-      -webkit-mask-image: -webkit-radial-gradient(white, black);
-      /* Activates hardware acceleration and fixes border-radius clip on Android */
-    }
-
-    /* Android: table horizontal scroll fix */
-    .adm-table-wrap, div[style*="overflow-x:auto"] {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
-    }
-
-    /* Android: fix for emoji rendering in buttons (Samsung Internet sometimes clips) */
-    button, .nav-item, .icon-btn {
-      line-height: normal;
-      white-space: nowrap;
-    }
-
-    /* Android: ensure fixed position elements account for virtual keyboard */
-    #audio-player {
-      /* Use env() with fallback for older Android */
-      bottom: 24px;
-      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    }
-
-    /* === Windows High Contrast Mode === */
-    @media (forced-colors: active) {
-      .btn-primary, .btn-read, .hero-cta, .adm-save {
-        border: 2px solid ButtonText;
-        forced-color-adjust: none;
-      }
-      .progress-fill, .adm-progress-fill { background: Highlight; }
-    }
-
     :root {
+      --font-ui: 'Outfit', 'Inter', sans-serif;
       --font-reading: 'Lora', 'Merriweather', Georgia, serif;
       --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-full: 9999px;
       --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -647,10 +92,12 @@
       --gradient-card: linear-gradient(145deg, rgba(15,43,51,0.5), rgba(12,35,42,0.4));
       --gradient-progress: linear-gradient(90deg,#0ea5e9,#10b981);
     }
-    *,*::before,*::after{margin:0;padding:0;}
-    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;}
     img{max-width:100%;display:block;}a{text-decoration:none;color:inherit;}
     button{cursor:pointer;border:none;background:none;font-family:inherit;}ul{list-style:none;}
+    ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:var(--r-full);}
 
     .page{display:none; opacity:0; transform:scale(0.95) translateY(18px); transition:opacity 0.5s var(--ease), transform 0.5s var(--ease-spring);}
     .page.active{display:flex; opacity:1; transform:scale(1) translateY(0);}
@@ -663,7 +110,7 @@
 
 
     /* ===== LOGIN ===== */
-    #page-login{min-height:100vh;min-height:calc(var(--vh,1vh)*100);background:var(--gradient-hero);flex-direction:row;align-items:stretch;}
+    #page-login{min-height:100vh;background:var(--gradient-hero);flex-direction:row;align-items:stretch;}
     .login-art{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;background:linear-gradient(145deg,#12003e 0%,#1a1040 40%,#0a1628 100%);}
     .login-art-bg{position:absolute;inset:0;overflow:hidden;}
     .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.5;animation:floatOrb 8s ease-in-out infinite alternate;}
@@ -709,8 +156,8 @@
     .btn-social:hover{background:var(--bg-card-hover);border-color:var(--border-accent);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
 
     /* ===== DASHBOARD LAYOUT ===== */
-    #page-dashboard{min-height:100vh;min-height:calc(var(--vh,1vh)*100);flex-direction:row;}
-    .sidebar{width:var(--sidebar-w);min-height:100vh;min-height:calc(var(--vh,1vh)*100);background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
+    #page-dashboard{min-height:100vh;flex-direction:row;}
+    .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
     .sidebar-logo{padding:26px 22px 20px;font-size:22px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;border-bottom:1px solid var(--divider);}
     .sidebar-user{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:1px solid var(--divider);}
     .user-avatar{width:42px;height:42px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:white;flex-shrink:0;box-shadow:0 0 0 2px rgba(124,58,237,0.35);}
@@ -735,6 +182,7 @@
     .search-bar input{background:none;border:none;outline:none;font-size:13px;color:var(--text-primary);width:100%;font-family:inherit;}
     .search-bar input::placeholder{color:var(--text-muted);}
     .topbar-actions{display:flex;align-items:center;gap:7px;}
+    .mobile-hamburger{display:none;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-right:12px;line-height:1;}
     .icon-btn{width:38px;height:38px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);font-size:17px;transition:all 0.25s var(--ease-spring);cursor:pointer;position:relative;}
     .icon-btn:hover{background:var(--bg-card-hover);color:var(--accent-2);border-color:var(--border-accent);transform:translateY(-2px) scale(1.1);box-shadow:var(--shadow-sm);}
     .icon-btn:active{transform:scale(0.92);}
@@ -1010,7 +458,7 @@
       .nav-item {justify-content:center; padding:14px;}
       .nav-icon {margin:0;}
     }
-    @media(max-width:767px){:root{--sidebar-w:0px;}.sidebar{transform:translateX(-260px);width:260px;}.sidebar.open{transform:translateX(0);}.main-content{margin-left:0!important;}.settings-grid{grid-template-columns:1fr;}.stats-page-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:767px){:root{--sidebar-w:0px;}.sidebar{transform:translateX(-260px);width:260px;}.sidebar.open{transform:translateX(0);}.mobile-hamburger{display:flex;}.main-content{margin-left:0!important;}.settings-grid{grid-template-columns:1fr;}.stats-page-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:600px){#page-login{flex-direction:column;}.login-art{padding:40px 24px;min-height:240px;}.login-form-panel{width:100%;padding:32px 20px;}.content-area{padding:16px;}.stats-page-grid{grid-template-columns:1fr;}.reader-content{padding:44px 20px 100px;}}
     /* ===== ADMIN PANEL ===== */
     #page-admin{min-height:100vh;background:var(--bg-base);color:var(--text-primary);flex-direction:column;}
@@ -1117,18 +565,12 @@
 </head>
 <body>
 
-<!-- Mobile sidebar overlay (shown when sidebar is open on small screens) -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- Mobile hamburger button (only visible on small screens) -->
-<button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
-
 <!-- ===================== LOGIN ===================== -->
 <div id="page-login" class="page active">
   <div class="login-art">
     <div class="login-art-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
     <div class="login-art-content animate-in">
-      <div class="login-logo-big">📖 Readify</div>
+      <div class="login-logo-big">📖 Bangla Scan</div>
       <div class="login-tagline">Your personal reading universe</div>
       <div class="login-art-books">
         <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%231a0342'/%3E%3Ccircle cx='37' cy='44' r='19' fill='none' stroke='%237c3aed' stroke-width='2'/%3E%3Ccircle cx='37' cy='44' r='9' fill='%237c3aed' opacity='0.7'/%3E%3Cpath d='M29 36 L37 22 L45 36 L37 32Z' fill='%23f59e0b' opacity='0.9'/%3E%3Crect x='15' y='70' width='44' height='14' rx='2' fill='%23a78bfa' opacity='0.85'/%3E%3Crect x='21' y='88' width='32' height='8' rx='1' fill='%23a78bfa' opacity='0.4'/%3E%3C/svg%3E" alt="fantasy" /></div>
@@ -1143,14 +585,14 @@
     </div>
   </div>
   <div class="login-form-panel">
-    <div class="login-form-logo">📖 Readify</div>
+    <div class="login-form-logo">📖 Bangla Scan</div>
     <div class="login-form-sub">Welcome back — sign in to continue reading</div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</div>
       <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</div>
     </div>
     <div id="signin-form" style="width:100%">
-      <div class="form-group"><label class="form-label" for="login-email">Email</label><input type="email" id="login-email" class="form-input" placeholder="you@example.com" value="alex@readify.io" /></div>
+      <div class="form-group"><label class="form-label" for="login-email">Email</label><input type="email" id="login-email" class="form-input" placeholder="you@example.com" value="alex@Bangla Scan.io" /></div>
       <div class="form-group">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
           <label class="form-label" for="login-pw" style="margin-bottom:0;">Password</label>
@@ -1158,7 +600,7 @@
         </div>
         <input type="password" id="login-pw" class="form-input" placeholder="••••••••" value="password123" />
       </div>
-      <button class="btn-primary" onclick="doLogin()" style="margin-top:6px">Sign In to Readify →</button>
+      <button class="btn-primary" onclick="doLogin()" style="margin-top:6px">Sign In to Bangla Scan →</button>
     </div>
     <div id="forgot-form" style="width:100%;display:none">
       <div class="login-form-sub" style="margin-top:-10px;">Enter your email to receive a password reset link.</div>
@@ -1188,7 +630,7 @@
     <div class="orb orb-dash-3"></div>
   </div>
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo" onclick="navTo('home')" style="cursor:pointer">📖 Readify</div>
+    <div class="sidebar-logo" onclick="navTo('home')" style="cursor:pointer">📖 Bangla Scan</div>
     <div class="sidebar-user">
       <div class="user-avatar" id="dash-avatar">A</div>
       <div class="user-info"><div class="user-name" id="dash-user-name">Alex Johnson</div><div class="user-tag">✨ Premium Reader</div></div>
@@ -1213,6 +655,7 @@
 
   <div class="main-content">
     <div class="topbar">
+      <div class="mobile-hamburger" onclick="toggleSidebar()">☰</div>
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="search-bar">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1317,7 +760,7 @@
           <div class="settings-card">
             <div class="settings-title">👤 Profile</div>
             <div class="profile-avatar-big" id="settings-avatar">A</div>
-            <div style="text-align:center;margin-bottom:18px"><div style="font-weight:700;font-size:15px" id="settings-name">Alex Johnson</div><div style="font-size:12px;color:var(--text-secondary)">alex@readify.io</div><div style="font-size:11px;color:var(--accent-2);margin-top:3px">✨ Premium Member</div></div>
+            <div style="text-align:center;margin-bottom:18px"><div style="font-weight:700;font-size:15px" id="settings-name">Alex Johnson</div><div style="font-size:12px;color:var(--text-secondary)">alex@Bangla Scan.io</div><div style="font-size:11px;color:var(--accent-2);margin-top:3px">✨ Premium Member</div></div>
             <div class="form-group" style="margin-bottom:10px"><label class="form-label">Display Name</label><input type="text" id="profile-name-input" class="form-input" style="padding:10px 13px" /></div>
             <button class="btn-primary" onclick="saveProfile()" style="padding:11px">Save Changes</button>
           </div>
@@ -1339,8 +782,8 @@
             <div class="setting-row"><div><div class="setting-label">Reading Speed</div><div class="setting-desc">Estimated</div></div><div style="font-size:12px;font-weight:600;color:var(--accent-2)">250 WPM</div></div>
           </div>
           <div class="settings-card">
-            <div class="settings-title">ℹ️ About Readify</div>
-            <div style="text-align:center;padding:16px 0"><div style="font-size:28px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Readify</div><div style="font-size:12px;color:var(--text-muted);margin-top:3px">Version 2.0.0</div><div style="font-size:13px;color:var(--text-secondary);margin-top:14px;line-height:1.6">Your premium reading companion. Track your library, discover new books, and build lasting reading habits.</div></div>
+            <div class="settings-title">ℹ️ About Bangla Scan</div>
+            <div style="text-align:center;padding:16px 0"><div style="font-size:28px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Bangla Scan</div><div style="font-size:12px;color:var(--text-muted);margin-top:3px">Version 2.0.0</div><div style="font-size:13px;color:var(--text-secondary);margin-top:14px;line-height:1.6">Your premium reading companion. Track your library, discover new books, and build lasting reading habits.</div></div>
             <div class="setting-row"><div class="setting-label">Privacy Policy</div><div style="color:var(--accent-2);font-size:12px">View →</div></div>
             <div class="setting-row"><div class="setting-label">Terms of Service</div><div style="color:var(--accent-2);font-size:12px">View →</div></div>
             <div class="setting-row"><div class="setting-label">Clear Reading Data</div><div style="color:var(--accent-danger);font-size:12px;cursor:pointer" onclick="confirmClearData()">Clear →</div></div>
@@ -1458,190 +901,6 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-// CROSS-BROWSER & MOBILE COMPATIBILITY FUNCTIONS
-// ═══════════════════════════════════════════════
-
-// Mobile sidebar toggle
-function toggleSidebar() {
-  var sidebar = document.querySelector('.sidebar');
-  var overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar) return;
-  var isOpen = sidebar.classList.contains('open');
-  if (isOpen) {
-    sidebar.classList.remove('open');
-    if (overlay) overlay.classList.remove('visible');
-    document.body.style.overflow = '';
-  } else {
-    sidebar.classList.add('open');
-    if (overlay) overlay.classList.add('visible');
-    // Prevent body scroll while sidebar is open on mobile
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function closeSidebar() {
-  var sidebar = document.querySelector('.sidebar');
-  var overlay = document.getElementById('sidebar-overlay');
-  if (sidebar) sidebar.classList.remove('open');
-  if (overlay) overlay.classList.remove('visible');
-  document.body.style.overflow = '';
-}
-
-// Close sidebar when a nav item is tapped on mobile
-document.addEventListener('DOMContentLoaded', function() {
-  // ── Android detection ──────────────────────────────────────────
-  var ua = navigator.userAgent || '';
-  var isAndroid = /Android/i.test(ua);
-  var isSamsungBrowser = /SamsungBrowser/i.test(ua);
-  var isAndroidWebView = /wv/.test(ua) && isAndroid;
-  if (isAndroid) document.documentElement.classList.add('is-android');
-  if (isSamsungBrowser) document.documentElement.classList.add('is-samsung');
-  if (isAndroidWebView) document.documentElement.classList.add('is-webview');
-
-  // Android: disable heavy animations on low-end / old WebView devices
-  var lowEnd = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) ||
-               (navigator.deviceMemory && navigator.deviceMemory <= 1);
-  if (lowEnd || isAndroidWebView) {
-    var s = document.createElement('style');
-    s.textContent = [
-      '.is-android.is-webview .orb,',
-      '.is-android.is-webview .orb-dash-1,',
-      '.is-android.is-webview .orb-dash-2,',
-      '.is-android.is-webview .orb-dash-3 { animation: none !important; filter: blur(40px) !important; }',
-      '.is-android .animate-in { animation-duration: 0.15s !important; }',
-      '.is-android .book-card:hover { transform: none !important; }',
-      '.is-android .stat-card:hover { transform: none !important; }',
-    ].join('\n');
-    document.head.appendChild(s);
-  }
-
-  // ── Viewport height (iOS + Android toolbar bug) ────────────────
-  function setVh() {
-    var vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-  }
-  setVh();
-  window.addEventListener('resize', setVh, {passive: true});
-  window.addEventListener('orientationchange', function() {
-    setTimeout(setVh, 300);
-  }, {passive: true});
-
-  // ── Passive touch listeners (Android performance) ───────────────
-  document.addEventListener('touchstart', function(){}, {passive: true});
-  document.addEventListener('touchmove', function(){}, {passive: true});
-
-  // ── OS dark mode ────────────────────────────────────────────────
-  if (!localStorage.getItem('readify_theme')) {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-  if (window.matchMedia) {
-    try {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!localStorage.getItem('readify_theme')) {
-          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-        }
-      });
-    } catch(e) {
-      // older Android Safari doesn't support addEventListener on MediaQueryList
-      window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
-        if (!localStorage.getItem('readify_theme')) {
-          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-        }
-      });
-    }
-  }
-
-  // ── Nav items: close sidebar on mobile tap ──────────────────────
-  var navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(function(item) {
-    item.addEventListener('click', function() {
-      if (window.innerWidth < 768) closeSidebar();
-    });
-  });
-
-  // ── Keyboard: Escape closes sidebar ────────────────────────────
-  document.addEventListener('keydown', function(e) {
-    if ((e.key === 'Escape' || e.keyCode === 27) && window.innerWidth < 768) {
-      closeSidebar();
-    }
-  });
-
-  // ── Android: fix for inputs inside forms that may be clipped ───
-  if (isAndroid) {
-    document.querySelectorAll('input, textarea').forEach(function(el) {
-      el.addEventListener('focus', function() {
-        // On Android, scrolling to focused input manually prevents it being
-        // hidden behind the virtual keyboard
-        setTimeout(function() {
-          el.scrollIntoView({behavior: 'smooth', block: 'center'});
-        }, 300);
-      }, {passive: true});
-    });
-  }
-});
-
-// Polyfill: Element.closest for older Android browsers
-if (!Element.prototype.closest) {
-  Element.prototype.closest = function(s) {
-    var el = this;
-    do {
-      if (el.matches ? el.matches(s) : el.msMatchesSelector ? el.msMatchesSelector(s) : false) return el;
-      el = el.parentElement || el.parentNode;
-    } while (el !== null && el.nodeType === 1);
-    return null;
-  };
-}
-
-// Polyfill: NodeList.forEach for Android < 5 / older Samsung Internet
-if (typeof NodeList !== 'undefined' && NodeList.prototype && !NodeList.prototype.forEach) {
-  NodeList.prototype.forEach = Array.prototype.forEach;
-}
-
-// Polyfill: Element.matches for older Android WebView
-if (!Element.prototype.matches) {
-  Element.prototype.matches =
-    Element.prototype.msMatchesSelector ||
-    Element.prototype.webkitMatchesSelector ||
-    function(s) {
-      var matches = (this.document || this.ownerDocument).querySelectorAll(s), i = matches.length;
-      while (--i >= 0 && matches.item(i) !== this) {}
-      return i > -1;
-    };
-}
-
-// Polyfill: CustomEvent for IE / old Android WebView
-(function() {
-  if (typeof window.CustomEvent === 'function') return;
-  function CustomEvent(event, params) {
-    params = params || {bubbles: false, cancelable: false, detail: null};
-    var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    return evt;
-  }
-  CustomEvent.prototype = window.Event.prototype;
-  window.CustomEvent = CustomEvent;
-})();
-
-// Polyfill: Object.assign for old Android
-if (typeof Object.assign !== 'function') {
-  Object.assign = function(target) {
-    if (target == null) throw new TypeError('Cannot convert undefined or null to object');
-    target = Object(target);
-    for (var i = 1; i < arguments.length; i++) {
-      var src = arguments[i];
-      if (src != null) {
-        for (var key in src) {
-          if (Object.prototype.hasOwnProperty.call(src, key)) target[key] = src[key];
-        }
-      }
-    }
-    return target;
-  };
-}
-
 // ===================== DATA =====================
 let BOOKS=[
   {id:0,title:"The Midnight Throne",author:"Elena Rivers",genre:"Fantasy",pages:428,rating:4.8,progress:64,status:"reading",currentChapter:2,
@@ -1675,8 +934,8 @@ let WISHLIST=[
   {id:12,title:"The Final Empire",author:"Brandon Sanderson",genre:"Fantasy",rating:4.8,progress:0,status:"wishlist",cover:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='260'%3E%3Crect width='180' height='260' fill='%23100500'/%3E%3Cpath d='M90 40 L110 82 L90 72 L70 82Z' fill='%23f59e0b' opacity='0.9'/%3E%3Ccircle cx='90' cy='66' r='7' fill='%23f59e0b'/%3E%3Crect x='28' y='158' width='124' height='16' rx='2' fill='%23f59e0b' opacity='0.9'/%3E%3Crect x='48' y='180' width='84' height='8' rx='1' fill='%23f59e0b' opacity='0.4'/%3E%3C/svg%3E"}
 ];
 
-function saveBooks() { try{localStorage.setItem("readify_custom_books", JSON.stringify(BOOKS));}catch(e){} }
-function loadBooks() { try{const b=localStorage.getItem("readify_custom_books");if(b)BOOKS=JSON.parse(b);}catch(e){} }
+function saveBooks() { try{localStorage.setItem("Bangla Scan_custom_books", JSON.stringify(BOOKS));}catch(e){} }
+function loadBooks() { try{const b=localStorage.getItem("Bangla Scan_custom_books");if(b)BOOKS=JSON.parse(b);}catch(e){} }
 
 // Rich chapter content keyed by [bookId][chapterIdx]
 const CHAPTER_TEXT={
@@ -1932,9 +1191,9 @@ let sessionStartProgress=0;
 let USERS = {};
 let activeSession = null;
 
-function saveUsers() { try{localStorage.setItem("readify_users", JSON.stringify(USERS));}catch(e){} }
+function saveUsers() { try{localStorage.setItem("Bangla Scan_users", JSON.stringify(USERS));}catch(e){} }
 function loadUsers() { 
-  try{ const u=localStorage.getItem("readify_users"); if(u) USERS=JSON.parse(u); }catch(e){}
+  try{ const u=localStorage.getItem("Bangla Scan_users"); if(u) USERS=JSON.parse(u); }catch(e){}
   // Ensure admin user exists
   if(!USERS[ADMIN_EMAIL]) {
     USERS[ADMIN_EMAIL] = { 
@@ -1948,7 +1207,7 @@ function loadUsers() {
     };
     saveUsers();
   }
-  try{ activeSession=localStorage.getItem("readify_session"); }catch(e){}
+  try{ activeSession=localStorage.getItem("Bangla Scan_session"); }catch(e){}
 }
 
 function switchAuthTab(t){
@@ -1998,7 +1257,7 @@ function doRegister(){
 }
 function startSession(e){
   activeSession = e;
-  try{localStorage.setItem("readify_session", e);}catch(e){}
+  try{localStorage.setItem("Bangla Scan_session", e);}catch(e){}
   const u = USERS[e];
   U = { name: u.name, email: e };
   progress = u.progress || {};
@@ -2032,13 +1291,13 @@ function tc(s){return s.replace(/\w+/g,t=>t[0].toUpperCase()+t.slice(1));}
 function goToLogin(){
   activeSession = null;
   U = null;
-  try{localStorage.removeItem("readify_session");}catch(e){}
+  try{localStorage.removeItem("Bangla Scan_session");}catch(e){}
   document.getElementById("nav-admin").style.display = "none";
   showPage("login");
 }
 
 // ===================== PAGES =====================
-function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+p).classList.add("active");document.body.style.overflow=p==="reader"?"hidden auto":"";if(window.innerWidth<768)closeSidebar();}
+function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+p).classList.add("active");document.body.style.overflow=p==="reader"?"hidden auto":"";}
 
 // ===================== DASHBOARD =====================
 function initDash(){
@@ -2092,6 +1351,7 @@ function animateValue(id, start, end, duration, suffix="") {
   window.requestAnimationFrame(step);
 }
 function updateGreeting(){const h=new Date().getHours();document.getElementById("greeting-time").textContent=h<12?"Good morning ☀️":h<17?"Good afternoon 👋":"Good evening ✨";}
+function toggleSidebar() { document.getElementById('sidebar')?.classList.toggle('open'); }
 function navTo(s){
   ["home","library","stats","wishlist","explore","trending","settings"].forEach(t=>{
     document.getElementById("tab-"+t)?.classList.toggle("active",t===s);
@@ -2099,6 +1359,7 @@ function navTo(s){
   });
   const titles={home:"Dashboard",library:"My Library",stats:"Statistics",wishlist:"Wishlist",explore:"Explore",trending:"Trending",settings:"Settings"};
   document.getElementById("topbar-title").textContent=titles[s]||"Dashboard";
+  document.getElementById('sidebar')?.classList.remove('open');
   window.scrollTo(0,0);
 }
 
@@ -2170,7 +1431,7 @@ function renderMonthly(){
   document.getElementById("monthly-labels").innerHTML=MONTHS.map(l=>`<div style="flex:1;text-align:center;font-size:9px;color:var(--text-muted)">${l}</div>`).join("");
 }
 function renderActs(){
-  const list = activities_.length ? activities_ : [{icon:"✨",color:"rgba(124,58,237,0.15)",title:"Welcome to Readify!",meta:"Start reading to see your activity here.",time:"Just now"}];
+  const list = activities_.length ? activities_ : [{icon:"✨",color:"rgba(124,58,237,0.15)",title:"Welcome to Bangla Scan!",meta:"Start reading to see your activity here.",time:"Just now"}];
   document.getElementById("activity-list").innerHTML=list.slice(0,5).map(a=>`<div class="activity-item"><div class="activity-icon" style="background:${a.color}">${a.icon}</div><div class="activity-text"><div class="activity-title">${a.title}</div><div class="activity-meta">${a.meta}</div></div><div class="activity-time">${a.time}</div></div>`).join("");
 }
 function renderStreak(){const days=["M","T","W","T","F","S","S"];const today=(new Date().getDay()+6)%7;document.getElementById("streak-days").innerHTML=days.map((d,i)=>`<div class="streak-day ${i<today?"done":i===today?"today":""}">${d}</div>`).join("");}
@@ -2373,7 +1634,7 @@ async function downloadEPUB(b){
   const o=zip.folder("OEBPS");
   const mf=chs.map(c=>`<item id="${c.id}" href="${c.id}.xhtml" media-type="application/xhtml+xml"/>`).join("");
   const sp=chs.map(c=>`<itemref idref="${c.id}"/>`).join("");
-  o.file("content.opf",'<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="uid">readify-'+b.id+'-'+Date.now()+'</dc:identifier><dc:title>'+b.title+'</dc:title><dc:creator>'+b.author+'</dc:creator><dc:language>en</dc:language><dc:subject>'+b.genre+'</dc:subject></metadata><manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="css" href="style.css" media-type="text/css"/>'+mf+'</manifest><spine>'+sp+'</spine></package>');
+  o.file("content.opf",'<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="uid">Bangla Scan-'+b.id+'-'+Date.now()+'</dc:identifier><dc:title>'+b.title+'</dc:title><dc:creator>'+b.author+'</dc:creator><dc:language>en</dc:language><dc:subject>'+b.genre+'</dc:subject></metadata><manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="css" href="style.css" media-type="text/css"/>'+mf+'</manifest><spine>'+sp+'</spine></package>');
   o.file("style.css","body{font-family:Georgia,serif;font-size:1em;line-height:1.8;color:#1a1a1a;max-width:600px;margin:0 auto;padding:1em 2em;}h2{font-family:Arial,sans-serif;font-size:1.4em;margin-bottom:.3em;}p{margin-bottom:1.2em;text-indent:1.5em;}p:first-of-type{text-indent:0;}p:first-of-type::first-letter{font-size:3em;line-height:.8;float:left;margin:0 .1em 0 0;font-weight:700;color:#7c3aed;}");
   const nav=chs.map(c=>`<li><a href="${c.id}.xhtml">${c.title}</a></li>`).join("");
   o.file("nav.xhtml",'<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>Contents</title></head><body><nav epub:type="toc"><h1>Contents</h1><ol>'+nav+'</ol></nav></body></html>');
@@ -2528,7 +1789,7 @@ document.addEventListener("keydown",e=>{
 });
 
 // ===================== ADMIN PANEL =====================
-const ADMIN_EMAIL = "admin@readify.io";
+const ADMIN_EMAIL = "admin@Bangla Scan.io";
 let adminPassword = "admin2024";
 let admLogs = [];
 let adminSettings = { allowReg: true, maintenance: false, downloads: true, tracking: true };
@@ -2536,20 +1797,20 @@ let admCurrentFilter = 'all';
 
 function loadAdminState() {
   try {
-    const st = localStorage.getItem('readify_admin_settings');
+    const st = localStorage.getItem('Bangla Scan_admin_settings');
     if (st) {
       const p = JSON.parse(st);
       if (p.pw) adminPassword = p.pw;
       if (p.toggles) adminSettings = p.toggles;
     }
-    const lg = localStorage.getItem('readify_admin_logs');
+    const lg = localStorage.getItem('Bangla Scan_admin_logs');
     if (lg) admLogs = JSON.parse(lg);
   } catch(e) {}
 }
 function saveAdminState() {
   try {
-    localStorage.setItem('readify_admin_settings', JSON.stringify({ pw: adminPassword, toggles: adminSettings }));
-    localStorage.setItem('readify_admin_logs', JSON.stringify(admLogs));
+    localStorage.setItem('Bangla Scan_admin_settings', JSON.stringify({ pw: adminPassword, toggles: adminSettings }));
+    localStorage.setItem('Bangla Scan_admin_logs', JSON.stringify(admLogs));
   } catch(e) {}
 }
 loadAdminState();
@@ -2604,7 +1865,7 @@ function admNav(sec){
 
 // ---- Aggregate all users' data from localStorage ----
 function admGetAllUsers(){
-  try{ return JSON.parse(localStorage.getItem('readify_users')||'{}'); }catch(e){ return {}; }
+  try{ return JSON.parse(localStorage.getItem('Bangla Scan_users')||'{}'); }catch(e){ return {}; }
 }
 
 function admInitDashboard(){
@@ -2726,7 +1987,7 @@ function admBanUser(email){
   openModal('Ban User','Remove this user and all their data? This cannot be undone.',()=>{
     const users=admGetAllUsers();
     delete users[email];
-    localStorage.setItem('readify_users',JSON.stringify(users));
+    localStorage.setItem('Bangla Scan_users',JSON.stringify(users));
     admLog('warn','User banned/removed: '+email);
     admRenderUsers();
     showToast('&#x1F6AB; User removed: '+email);
@@ -2761,7 +2022,7 @@ function admSaveUser() {
     users[email].stats.booksRead = books;
     users[email].stats.pagesRead = pages;
     users[email].stats.hoursRead = hours;
-    localStorage.setItem('readify_users', JSON.stringify(users));
+    localStorage.setItem('Bangla Scan_users', JSON.stringify(users));
     if(email === U?.email) {
        U.name = name;
        stats_ = users[email].stats;
@@ -2901,9 +2162,9 @@ function admExportReport(type){
   if(type==='csv'){
     let csv='Name,Email,BooksRead,PagesRead,HoursRead,BestStreak\n';
     keys.forEach(e=>{const u=users[e];csv+=`"${u.name||''}","${e}",${u.stats?.booksRead||0},${u.stats?.pagesRead||0},${(u.stats?.hoursRead||0).toFixed(1)},${u.streak?.best||0}\n`;});
-    const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_report.csv';a.click();
+    const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_report.csv';a.click();
   } else {
-    const blob=new Blob([JSON.stringify(users,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_report.json';a.click();
+    const blob=new Blob([JSON.stringify(users,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_report.json';a.click();
   }
   admLog('ok','Report exported as '+type.toUpperCase());
   showToast('&#x2705; Report exported as '+type.toUpperCase());
@@ -2976,13 +2237,13 @@ function admRenderStorageInfo(){
 function admExportAllData(){
   const data={users:admGetAllUsers(),exported:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_backup.json';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_backup.json';a.click();
   admLog('ok','Full data backup downloaded.');
   showToast('&#x2705; Backup downloaded!');
 }
 function admNukeAllData(){
   openModal('DANGER: Clear ALL Data','This will permanently delete all user accounts and reading data. This cannot be undone.',()=>{
-    localStorage.removeItem('readify_users');
+    localStorage.removeItem('Bangla Scan_users');
     admLog('err','ALL USER DATA CLEARED by admin.');
     showToast('&#x1F4A5; All data cleared. Reloading...');
     setTimeout(()=>location.reload(),1500);
@@ -2997,7 +2258,7 @@ enter();
 <div id="page-admin" class="page">
   <div class="adm-top">
     <div class="adm-hamburger" onclick="toggleAdmSidebar()">☰</div>
-    <div class="adm-logo">&#x1F6E1;&#xFE0F; Readify Admin</div>
+    <div class="adm-logo">&#x1F6E1;&#xFE0F; Bangla Scan Admin</div>
     <div class="adm-badge">ADMIN</div>
     <div class="adm-top-right">
       <div class="icon-btn tooltip-wrap" onclick="toggleTheme()" style="color:var(--text-primary);width:30px;height:30px;font-size:14px;"><span id="adm-theme-icon">☀️</span><div class="tooltip">Toggle Theme</div></div>
@@ -3137,7 +2398,7 @@ enter();
         <div class="adm-sett-grid">
           <div class="adm-sett-card">
             <div class="adm-sett-card-title">Admin Credentials</div>
-            <div class="adm-form-row"><label class="adm-lbl">Admin Email</label><input class="adm-inp" value="admin@readify.io" readonly></div>
+            <div class="adm-form-row"><label class="adm-lbl">Admin Email</label><input class="adm-inp" value="admin@Bangla Scan.io" readonly></div>
             <div class="adm-form-row"><label class="adm-lbl">New Password</label><input class="adm-inp" type="password" id="adm-pw-inp" placeholder="New password"></div>
             <div class="adm-form-row"><label class="adm-lbl">Confirm</label><input class="adm-inp" type="password" id="adm-pw2-inp" placeholder="Confirm password"></div>
             <button class="adm-save" onclick="admChangePassword()">Save Password</button>
