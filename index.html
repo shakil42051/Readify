@@ -10,6 +10,7 @@
   <meta name="theme-color" content="#7c3aed" />
   <meta name="application-name" content="Bangla Scan" />
   <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%237c3aed'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-size='100' font-family='serif'%3E📖%3C/text%3E%3C/svg%3E" />
   <title>Bangla Scan — Your Premium Reading Experience</title>
   <meta name="description" content="Bangla Scan is a premium book reading platform. Track your library, reading progress, and enjoy a distraction-free reader page." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -562,8 +563,8 @@
       .topbar-title{font-size:15px;}
       .search-bar{display:none;}
       .nav-item{min-height:52px;}
-      button,.btn-primary,.btn-outline,.filter-btn{min-height:44px;}
-      input,select,textarea{min-height:44px;font-size:16px!important;}
+      button,.btn-primary,.btn-outline,.filter-btn{min-height:48px;}
+      input,select,textarea{min-height:48px;font-size:16px!important;}
       .continue-reading-card{flex-direction:row;padding:16px;gap:16px;}
       .cr-book-cover{width:64px;height:96px;flex-shrink:0;}
       .cr-title{font-size:16px;}
@@ -721,12 +722,12 @@
   <div class="login-art">
     <div class="login-art-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
     <div class="login-art-content animate-in">
-      <div class="login-logo-big">📖 Bangla Scan</div>
+      <div class="login-logo-big" style="cursor:pointer;" onclick="enter()">📖 Bangla Scan</div>
       <div class="login-tagline">Your personal reading universe</div>
       <div class="login-art-books">
-        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%231a0342'/%3E%3Ccircle cx='37' cy='44' r='19' fill='none' stroke='%237c3aed' stroke-width='2'/%3E%3Ccircle cx='37' cy='44' r='9' fill='%237c3aed' opacity='0.7'/%3E%3Cpath d='M29 36 L37 22 L45 36 L37 32Z' fill='%23f59e0b' opacity='0.9'/%3E%3Crect x='15' y='70' width='44' height='14' rx='2' fill='%23a78bfa' opacity='0.85'/%3E%3Crect x='21' y='88' width='32' height='8' rx='1' fill='%23a78bfa' opacity='0.4'/%3E%3C/svg%3E" alt="fantasy" /></div>
-        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%230a1628'/%3E%3Ccircle cx='37' cy='38' r='15' fill='none' stroke='%2306b6d4' stroke-width='2'/%3E%3Ccircle cx='37' cy='38' r='6' fill='%2306b6d4'/%3E%3Ccircle cx='18' cy='24' r='2' fill='white' opacity='0.6'/%3E%3Ccircle cx='56' cy='20' r='2' fill='white' opacity='0.5'/%3E%3Ccircle cx='57' cy='52' r='2' fill='white' opacity='0.7'/%3E%3Crect x='15' y='68' width='44' height='14' rx='2' fill='%2306b6d4' opacity='0.85'/%3E%3Crect x='21' y='86' width='32' height='8' rx='1' fill='%2306b6d4' opacity='0.4'/%3E%3C/svg%3E" alt="scifi" /></div>
-        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%23200010'/%3E%3Cpath d='M37 18 C22 33 16 48 37 54 C58 48 52 33 37 18Z' fill='%23ec4899' opacity='0.85'/%3E%3Cpath d='M37 18 C22 3 16 18 37 24 C58 18 52 3 37 18Z' fill='%23f43f8a' opacity='0.7'/%3E%3Crect x='15' y='68' width='44' height='14' rx='2' fill='%23ec4899' opacity='0.85'/%3E%3Crect x='21' y='86' width='32' height='8' rx='1' fill='%23ec4899' opacity='0.4'/%3E%3C/svg%3E" alt="romance" /></div>
+        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%231a0342'/%3E%3Ccircle cx='37' cy='44' r='19' fill='none' stroke='%237c3aed' stroke-width='2'/%3E%3Ccircle cx='37' cy='44' r='9' fill='%237c3aed' opacity='0.7'/%3E%3Cpath d='M29 36 L37 22 L45 36 L37 32Z' fill='%23f59e0b' opacity='0.9'/%3E%3Crect x='15' y='70' width='44' height='14' rx='2' fill='%23a78bfa' opacity='0.85'/%3E%3Crect x='21' y='88' width='32' height='8' rx='1' fill='%23a78bfa' opacity='0.4'/%3E%3C/svg%3E" alt="fantasy" loading="lazy" /></div>
+        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%230a1628'/%3E%3Ccircle cx='37' cy='38' r='15' fill='none' stroke='%2306b6d4' stroke-width='2'/%3E%3Ccircle cx='37' cy='38' r='6' fill='%2306b6d4'/%3E%3Ccircle cx='18' cy='24' r='2' fill='white' opacity='0.6'/%3E%3Ccircle cx='56' cy='20' r='2' fill='white' opacity='0.5'/%3E%3Ccircle cx='57' cy='52' r='2' fill='white' opacity='0.7'/%3E%3Crect x='15' y='68' width='44' height='14' rx='2' fill='%2306b6d4' opacity='0.85'/%3E%3Crect x='21' y='86' width='32' height='8' rx='1' fill='%2306b6d4' opacity='0.4'/%3E%3C/svg%3E" alt="scifi" loading="lazy" /></div>
+        <div class="art-book"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='106'%3E%3Crect width='74' height='106' fill='%23200010'/%3E%3Cpath d='M37 18 C22 33 16 48 37 54 C58 48 52 33 37 18Z' fill='%23ec4899' opacity='0.85'/%3E%3Cpath d='M37 18 C22 3 16 18 37 24 C58 18 52 3 37 18Z' fill='%23f43f8a' opacity='0.7'/%3E%3Crect x='15' y='68' width='44' height='14' rx='2' fill='%23ec4899' opacity='0.85'/%3E%3Crect x='21' y='86' width='32' height='8' rx='1' fill='%23ec4899' opacity='0.4'/%3E%3C/svg%3E" alt="romance" loading="lazy" /></div>
       </div>
       <div class="login-stats">
         <div class="login-stat"><div class="login-stat-num">2.4M+</div><div class="login-stat-label">Books</div></div>
@@ -735,8 +736,9 @@
       </div>
     </div>
   </div>
-  <div class="login-form-panel">
-    <div class="login-form-logo">📖 Bangla Scan</div>
+  <div class="login-form-panel" style="position:relative;">
+    <button onclick="enter()" style="position:absolute; top: 24px; left: 24px; color: var(--text-secondary); font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; border: 1px solid var(--border); padding: 8px 14px; border-radius: var(--r-full); background: var(--bg-card); transition: all var(--t-fast) var(--ease); z-index: 10;" onmouseover="this.style.borderColor='var(--border-accent)'; this.style.color='var(--accent-2)';" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-secondary)';">← Back to Dashboard</button>
+    <div class="login-form-logo" style="cursor:pointer;" onclick="enter()">📖 Bangla Scan</div>
     <div class="login-form-sub">Welcome back — sign in to continue reading</div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</div>
@@ -809,7 +811,7 @@
   <div class="main-content">
     <div class="topbar">
       <div class="mobile-hamburger" onclick="toggleSidebar(event)">☰</div>
-      <div class="topbar-brand">📖 Bangla Scan</div>
+      <div class="topbar-brand" style="cursor:pointer" onclick="navTo('home')">📖 Bangla Scan</div>
       <div class="topbar-back" id="topbar-back-btn" onclick="navTo('home')">← Back</div>
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="search-bar">
