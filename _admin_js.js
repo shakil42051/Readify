@@ -1,5 +1,5 @@
-// ===================== ADMIN PANEL =====================
-const ADMIN_EMAIL = "admin@readify.io";
+﻿// ===================== ADMIN PANEL =====================
+const ADMIN_EMAIL = "admin@Bangla Scan.io";
 let adminPassword = "admin2024";
 let admLogs = [];
 let adminSettings = { allowReg: true, maintenance: false, downloads: true, tracking: true };
@@ -7,20 +7,20 @@ let admCurrentFilter = 'all';
 
 function loadAdminState() {
   try {
-    const st = localStorage.getItem('readify_admin_settings');
+    const st = localStorage.getItem('Bangla Scan_admin_settings');
     if (st) {
       const p = JSON.parse(st);
       if (p.pw) adminPassword = p.pw;
       if (p.toggles) adminSettings = p.toggles;
     }
-    const lg = localStorage.getItem('readify_admin_logs');
+    const lg = localStorage.getItem('Bangla Scan_admin_logs');
     if (lg) admLogs = JSON.parse(lg);
   } catch(e) {}
 }
 function saveAdminState() {
   try {
-    localStorage.setItem('readify_admin_settings', JSON.stringify({ pw: adminPassword, toggles: adminSettings }));
-    localStorage.setItem('readify_admin_logs', JSON.stringify(admLogs));
+    localStorage.setItem('Bangla Scan_admin_settings', JSON.stringify({ pw: adminPassword, toggles: adminSettings }));
+    localStorage.setItem('Bangla Scan_admin_logs', JSON.stringify(admLogs));
   } catch(e) {}
 }
 loadAdminState();
@@ -68,7 +68,7 @@ function admNav(sec){
 
 // ---- Aggregate all users' data from localStorage ----
 function admGetAllUsers(){
-  try{ return JSON.parse(localStorage.getItem('readify_users')||'{}'); }catch(e){ return {}; }
+  try{ return JSON.parse(localStorage.getItem('Bangla Scan_users')||'{}'); }catch(e){ return {}; }
 }
 
 function admInitDashboard(){
@@ -190,7 +190,7 @@ function admBanUser(email){
   openModal('Ban User','Remove this user and all their data? This cannot be undone.',()=>{
     const users=admGetAllUsers();
     delete users[email];
-    localStorage.setItem('readify_users',JSON.stringify(users));
+    localStorage.setItem('Bangla Scan_users',JSON.stringify(users));
     admLog('warn','User banned/removed: '+email);
     admRenderUsers();
     showToast('&#x1F6AB; User removed: '+email);
@@ -322,9 +322,9 @@ function admExportReport(type){
   if(type==='csv'){
     let csv='Name,Email,BooksRead,PagesRead,HoursRead,BestStreak\n';
     keys.forEach(e=>{const u=users[e];csv+=`"${u.name||''}","${e}",${u.stats?.booksRead||0},${u.stats?.pagesRead||0},${(u.stats?.hoursRead||0).toFixed(1)},${u.streak?.best||0}\n`;});
-    const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_report.csv';a.click();
+    const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_report.csv';a.click();
   } else {
-    const blob=new Blob([JSON.stringify(users,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_report.json';a.click();
+    const blob=new Blob([JSON.stringify(users,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_report.json';a.click();
   }
   admLog('ok','Report exported as '+type.toUpperCase());
   showToast('&#x2705; Report exported as '+type.toUpperCase());
@@ -397,13 +397,13 @@ function admRenderStorageInfo(){
 function admExportAllData(){
   const data={users:admGetAllUsers(),exported:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='readify_backup.json';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Bangla Scan_backup.json';a.click();
   admLog('ok','Full data backup downloaded.');
   showToast('&#x2705; Backup downloaded!');
 }
 function admNukeAllData(){
   openModal('DANGER: Clear ALL Data','This will permanently delete all user accounts and reading data. This cannot be undone.',()=>{
-    localStorage.removeItem('readify_users');
+    localStorage.removeItem('Bangla Scan_users');
     admLog('err','ALL USER DATA CLEARED by admin.');
     showToast('&#x1F4A5; All data cleared. Reloading...');
     setTimeout(()=>location.reload(),1500);
