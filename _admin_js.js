@@ -420,7 +420,7 @@ function admToggleSidebar(e) {
 }
 
 function admAutoCloseSidebar(e) {
-  if (window.innerWidth > 900) {
+  if (false) {
     if (!document.body.classList.contains('adm-sidebar-collapsed')) {
       document.body.classList.add('adm-sidebar-collapsed');
     }

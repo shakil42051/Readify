@@ -202,7 +202,7 @@
 
     /* ===== DASHBOARD LAYOUT ===== */
     #page-dashboard{min-height:100vh;flex-direction:row;}
-    .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:1000;overflow-y:auto;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
+    .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--bg-sidebar);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:1000;overflow-y:auto;overscroll-behavior:contain;transition:transform var(--t-normal) var(--ease); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);}
     .sidebar-logo{padding:26px 22px 20px;font-size:22px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;border-bottom:1px solid var(--divider);}
     .sidebar-user{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:1px solid var(--divider);}
     .user-avatar{width:42px;height:42px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:white;flex-shrink:0;box-shadow:0 0 0 2px rgba(124,58,237,0.35);}
@@ -228,60 +228,64 @@
     .search-bar:focus-within{border-color:var(--accent-1);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
     .search-bar input{background:none;border:none;outline:none;font-size:13px;color:var(--text-primary);width:100%;font-family:inherit;}
     .search-bar input::placeholder{color:var(--text-muted);}
-    .topbar-back{display:none;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-right:14px;padding:6px 12px;border-radius:var(--r-full);transition:all var(--t-fast) var(--ease);background:var(--bg-card);border:1px solid var(--border);}
+    .topbar-back{display:none;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-right:8px;padding:5px 12px;border-radius:var(--r-full);transition:all var(--t-fast) var(--ease);background:var(--bg-card);border:1px solid var(--border);}
+    .topbar-back.show-back{display:flex;}
     .topbar-back:hover{color:var(--accent-2);border-color:var(--border-accent);transform:translateX(-2px);box-shadow:var(--shadow-sm);}
     .topbar-actions{display:flex;align-items:center;gap:7px;}
-    .mobile-hamburger{display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-right:12px;line-height:1;}
+    .mobile-hamburger{display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-right:4px;line-height:1;}
+    .topbar-brand{font-size:15px;font-weight:900;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-right:8px;white-space:nowrap;flex-shrink:0;}
     .icon-btn{width:38px;height:38px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);font-size:17px;transition:all 0.25s var(--ease-spring);cursor:pointer;position:relative;}
     .icon-btn:hover{background:var(--bg-card-hover);color:var(--accent-2);border-color:var(--border-accent);transform:translateY(-2px) scale(1.1);box-shadow:var(--shadow-sm);}
     .icon-btn:active{transform:scale(0.92);}
-    .content-area{padding:28px 32px;flex:1;}
+    .content-area{padding:28px 32px;flex:1;max-width:1100px;margin:0 auto;width:100%;}
 
     /* ===== DASHBOARD SECTIONS ===== */
-    .hero-greeting{background:var(--gradient-hero);border-radius:var(--r-xl);padding:32px 36px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;overflow:hidden;border:1px solid var(--glass-border); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 16px 40px rgba(0,0,0,0.15);}
-    .hero-greeting::before{content:'';position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25) 0%,transparent 70%);}
-    .hero-greeting::after{content:'';position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,0.15) 0%,transparent 70%);}
-    .hero-text{position:relative;z-index:1;}
-    .hero-sub{font-size:13px;color:var(--text-muted);margin-bottom:5px;}
-    .hero-title{font-size:28px;font-weight:800;margin-bottom:8px;}
-    .hero-title span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .hero-desc{font-size:14px;color:var(--text-secondary);max-width:380px;}
-    .hero-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;background:var(--gradient-accent);color:white;border-radius:var(--r-full);font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(124,58,237,0.5);transition:all 0.4s var(--ease-spring);cursor:pointer;position:relative;z-index:1;white-space:nowrap;border:none;overflow:hidden;}
-    .hero-cta::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.2) 50%,transparent 60%);transform:translateX(-100%);transition:transform 0.6s ease;}
-    .hero-cta:hover::after{transform:translateX(100%);}
-    .hero-cta:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 12px 36px rgba(124,58,237,0.75);}
-    .hero-cta:active{transform:scale(0.97);}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;}
-    .stat-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-lg);padding:22px;transition:all var(--t-normal) var(--ease-spring);position:relative;overflow:hidden; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.1);}
-    .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0;}
+    /* Compact top bar: greeting + stat pills + CTA */
+    .home-summary-bar{display:flex;align-items:center;gap:14px;background:var(--gradient-hero);border:1px solid var(--glass-border);border-radius:var(--r-lg);padding:12px 18px;margin-bottom:16px;flex-wrap:wrap;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+    .home-greeting-mini{flex-shrink:0;min-width:130px;}
+    .home-stat-pills{display:flex;gap:8px;flex:1;flex-wrap:wrap;}
+    .stat-pill{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r-full);background:var(--bg-card);border:1px solid var(--glass-border);font-size:12px;font-weight:700;transition:all 0.2s var(--ease);cursor:default;white-space:nowrap;}
+    .stat-pill.violet{border-left:3px solid #7c3aed;}
+    .stat-pill.cyan{border-left:3px solid #06b6d4;}
+    .stat-pill.amber{border-left:3px solid #f59e0b;}
+    .stat-pill.pink{border-left:3px solid #ec4899;}
+    .pill-icon{font-size:13px;}
+    .pill-val{font-size:14px;font-weight:900;color:var(--text-primary);}
+    .pill-lbl{font-size:10px;color:var(--text-muted);font-weight:500;}
+    .hero-cta{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:var(--gradient-accent);color:white;border-radius:var(--r-full);font-size:12px;font-weight:700;box-shadow:0 4px 14px rgba(124,58,237,0.4);transition:all 0.3s var(--ease-spring);cursor:pointer;white-space:nowrap;border:none;flex-shrink:0;}
+    .hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.6);}
+    .hero-cta:active{transform:scale(0.96);}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
+    .stat-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:14px 16px;transition:all var(--t-normal) var(--ease-spring);position:relative;overflow:hidden; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 4px 16px rgba(0,0,0,0.08);}
+    .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--r-md) var(--r-md) 0 0;}
     .stat-card.violet::after{background:var(--gradient-accent);}
     .stat-card.cyan::after{background:linear-gradient(90deg,#06b6d4,#3b82f6);}
     .stat-card.amber::after{background:linear-gradient(90deg,#f59e0b,#ef4444);}
     .stat-card.pink::after{background:linear-gradient(90deg,#ec4899,#a78bfa);}
-    .stat-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,0.2);border-color:var(--border-accent);}
-    .stat-icon{width:42px;height:42px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+    .stat-card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 10px 28px rgba(0,0,0,0.15);border-color:var(--border-accent);}
+    .stat-icon{width:30px;height:30px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:8px;}
     .stat-icon.violet{background:rgba(124,58,237,0.15);}
     .stat-icon.cyan{background:rgba(6,182,212,0.15);}
     .stat-icon.amber{background:rgba(245,158,11,0.15);}
     .stat-icon.pink{background:rgba(236,72,153,0.15);}
-    .stat-value{font-size:30px;font-weight:900;line-height:1;margin-bottom:5px;}
-    .stat-label{font-size:13px;color:var(--text-secondary);font-weight:500;}
-    .stat-change{font-size:11px;margin-top:7px;}
+    .stat-value{font-size:22px;font-weight:900;line-height:1;margin-bottom:3px;}
+    .stat-label{font-size:11px;color:var(--text-secondary);font-weight:500;}
+    .stat-change{font-size:10px;margin-top:4px;}
     .stat-change.up{color:var(--accent-success);}
     .stat-change.neutral{color:var(--text-muted);}
     .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
     .section-title{font-size:17px;font-weight:700;}
     .section-action{font-size:13px;color:var(--accent-2);font-weight:600;cursor:pointer;transition:color var(--t-fast);}
     .section-action:hover{color:var(--accent-1);}
-    .continue-reading-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-xl);padding:24px;margin-bottom:24px;display:flex;gap:24px;align-items:center;transition:all var(--t-normal) var(--ease-spring); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.1);}
-    .continue-reading-card:hover{border-color:var(--border-accent);box-shadow:var(--shadow-lg); transform: translateY(-4px);}
-    .cr-book-cover{width:84px;height:122px;border-radius:var(--r-md);object-fit:cover;box-shadow:0 12px 40px rgba(0,0,0,0.5);flex-shrink:0;}
-    .cr-info{flex:1;}
-    .cr-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-2);margin-bottom:5px;}
-    .cr-title{font-size:19px;font-weight:800;margin-bottom:3px;}
-    .cr-author{font-size:13px;color:var(--text-secondary);margin-bottom:14px;}
-    .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:7px;}
-    .progress-bar{height:8px;background:var(--bg-input);border-radius:var(--r-full);overflow:hidden;}
+    .continue-reading-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-lg);padding:14px 18px;margin-bottom:16px;display:flex;gap:16px;align-items:center;transition:all var(--t-normal) var(--ease-spring); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 4px 16px rgba(0,0,0,0.08);}
+    .continue-reading-card:hover{border-color:var(--border-accent);box-shadow:var(--shadow-md); transform: translateY(-2px);}
+    .cr-book-cover{width:52px;height:76px;border-radius:var(--r-sm);object-fit:cover;box-shadow:0 6px 20px rgba(0,0,0,0.4);flex-shrink:0;}
+    .cr-info{flex:1;min-width:0;}
+    .cr-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-2);margin-bottom:3px;}
+    .cr-title{font-size:14px;font-weight:800;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cr-author{font-size:11px;color:var(--text-secondary);margin-bottom:8px;}
+    .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-bottom:5px;}
+    .progress-bar{height:5px;background:var(--bg-input);border-radius:var(--r-full);overflow:hidden;}
     .progress-fill{height:100%;background:var(--gradient-progress);border-radius:var(--r-full);transition:width 1s var(--ease);}
     .cr-actions{display:flex;gap:10px;margin-top:14px;}
     .btn-read{padding:10px 22px;background:var(--gradient-accent);color:white;border-radius:var(--r-full);font-size:14px;font-weight:700;box-shadow:0 4px 16px rgba(124,58,237,0.4);transition:all 0.35s var(--ease-spring);cursor:pointer;border:none;position:relative;overflow:hidden;}
@@ -347,7 +351,7 @@
     .genre-tag.active{background:var(--gradient-accent);color:white;}
     .genre-tag:not(.active){background:var(--bg-input);color:var(--text-secondary);border:1px solid var(--border);}
     .genre-tag:not(.active):hover{border-color:var(--border-accent);color:var(--accent-2);}
-    .sidebar-panel{display:flex;flex-direction:column;gap:18px;}
+
     .panel-card{background:var(--gradient-card);border:1px solid var(--glass-border);border-radius:var(--r-xl);padding:22px; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.15);transition:transform 0.3s var(--ease-spring),box-shadow 0.3s var(--ease);}
     .panel-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.22);}
     .panel-card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
@@ -524,7 +528,6 @@
     /* Standard Desktop 1100-1400px */
     @media(max-width:1400px) and (min-width:1101px){.books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}}
     /* Small Desktop / Large Tablet 1024-1100px */
-    @media(max-width:1100px){.dashboard-grid{grid-template-columns:1fr;}}
     /* Tablet 768-1024px */
     @media(max-width:1024px) and (min-width:768px){
       :root{--sidebar-w:84px;}
@@ -548,12 +551,12 @@
       }
       .sidebar.open{transform:translateX(0);box-shadow:0 0 60px rgba(0,0,0,0.6);}
       .mobile-hamburger{display:flex;}
-      .topbar-back.show-back{display:flex;}
+      /* show-back handled globally now */
       .main-content{margin-left:0!important;}
       .settings-grid{grid-template-columns:1fr;}
       .books-grid,.library-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
       .book-card{font-size:12px;}
-      .hero-greeting{flex-direction:column;gap:12px;}
+      .hero-greeting{flex-direction:column;gap:12px;padding:20px;text-align:center;}
       .hero-cta{width:100%;}
       .topbar{padding:0 14px;height:54px;gap:8px;}
       .topbar-title{font-size:15px;}
@@ -561,8 +564,10 @@
       .nav-item{min-height:52px;}
       button,.btn-primary,.btn-outline,.filter-btn{min-height:44px;}
       input,select,textarea{min-height:44px;font-size:16px!important;}
-      .continue-reading-card{flex-direction:column;}
-      .cr-book-cover{width:100%;height:160px;object-fit:cover;border-radius:var(--r-md);}
+      .continue-reading-card{flex-direction:row;padding:16px;gap:16px;}
+      .cr-book-cover{width:64px;height:96px;flex-shrink:0;}
+      .cr-title{font-size:16px;}
+      .panel-card{padding:16px;}
       .dashboard-grid{grid-template-columns:1fr;}
       /* iOS safe areas */
       .sidebar{padding-top:env(safe-area-inset-top);}
@@ -612,7 +617,7 @@
     .adm-back{padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--text-secondary);cursor:pointer;background:transparent;transition:all .2s;}
     .adm-back:hover{color:var(--accent-2);border-color:var(--border-accent);}
     .adm-layout{display:flex;min-height:100vh;padding-top:56px;}
-    .adm-sidebar{width:210px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;padding:16px 0;transition:transform var(--t-fast) var(--ease);}
+    .adm-sidebar{width:210px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 0;transition:transform var(--t-fast) var(--ease);}
     .adm-nav-sec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);padding:0 16px;margin:14px 0 5px;}
     .adm-nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
     .adm-nav-item:hover{background:var(--bg-card-hover);color:var(--accent-2);}
@@ -625,7 +630,7 @@
     .adm-sec.active{display:block;}
     .adm-title{font-size:20px;font-weight:800;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
     .adm-sub{font-size:12px;color:var(--text-secondary);margin-bottom:20px;}
-    .adm-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+    .adm-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px;}
     .adm-kpi{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .3s;cursor:default;}
     .adm-kpi:hover{border-color:var(--border-accent);transform:translateY(-2px);box-shadow:var(--shadow-md);}
     .adm-kpi-icon{font-size:20px;margin-bottom:10px;}
@@ -686,7 +691,7 @@
     .dot-info{background:var(--accent-3);}.dot-warn{background:var(--accent-4);}.dot-err{background:var(--accent-danger);}.dot-ok{background:var(--accent-success);}
     .adm-log-msg{font-size:12px;color:var(--text-secondary);flex:1;line-height:1.5;}
     .adm-log-time{font-size:10px;color:var(--text-muted);white-space:nowrap;font-family:'Inter',monospace;}
-    .adm-sett-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .adm-sett-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
     .adm-sett-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px;}
     .adm-sett-card-title{font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--divider);}
     .adm-form-row{margin-bottom:12px;}
@@ -704,7 +709,7 @@
     .adm-stat-number{font-size:13px;font-weight:700;color:var(--text-primary);}
     .adm-hamburger{display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;padding:0 10px;margin-right:5px;}
     .adm-table-wrap{width:100%;overflow-x:auto;}
-    @media(max-width:900px){.adm-kpi-grid{grid-template-columns:repeat(2,1fr);}.adm-grid2{grid-template-columns:1fr;}.adm-sett-grid{grid-template-columns:1fr;}.adm-sidebar{transform:translateX(-100%);z-index:250;}.adm-sidebar.open{transform:translateX(0);}.adm-main{margin-left:0;}.adm-hamburger{display:flex;}}
+    @media(max-width:900px){.adm-grid2{grid-template-columns:1fr;}.adm-sidebar{transform:translateX(-100%);z-index:250;}.adm-sidebar.open{transform:translateX(0);}.adm-main{margin-left:0;}.adm-hamburger{display:flex;}}
     body.adm-sidebar-collapsed .adm-sidebar{transform:translateX(-100%);}
     body.adm-sidebar-collapsed .adm-main{margin-left:0;}
   </style>
@@ -804,13 +809,15 @@
   <div class="main-content">
     <div class="topbar">
       <div class="mobile-hamburger" onclick="toggleSidebar(event)">☰</div>
-      <div class="topbar-back" id="topbar-back-btn" onclick="navTo('home')" style="display:none;">← Back</div>
+      <div class="topbar-brand">📖 Bangla Scan</div>
+      <div class="topbar-back" id="topbar-back-btn" onclick="navTo('home')">← Back</div>
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="search-bar">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input type="text" placeholder="Search books, authors, genres..." oninput="handleSearch(this.value)" />
       </div>
       <div class="topbar-actions">
+        <button id="topbar-login-btn" onclick="goToLogin()" style="display:none; padding: 7px 16px; background: var(--gradient-accent); color: white; border: none; border-radius: var(--r-full); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 12px rgba(124,58,237,0.3);" onmouseover="this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(124,58,237,0.5)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 12px rgba(124,58,237,0.3)';">Sign Up / Log In</button>
         <div class="icon-btn tooltip-wrap" style="position:relative">🔔<div class="notification-dot"></div><div class="tooltip">Notifications</div></div>
         <div class="icon-btn tooltip-wrap" onclick="toggleTheme()"><span id="theme-icon">🌙</span><div class="tooltip">Toggle Theme</div></div>
         <div class="user-avatar" style="width:34px;height:34px;font-size:13px;cursor:pointer" id="topbar-avatar" onclick="navTo('settings')">A</div>
@@ -820,23 +827,38 @@
 
       <!-- HOME -->
       <div class="tab-content active" id="tab-home">
-        <div id="dash-broadcast-banner" style="display:none;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.3);color:#fde047;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;font-weight:600;align-items:center;gap:10px;">
-          <span style="font-size:18px">📢</span> <span id="dash-broadcast-text"></span>
+        <div id="dash-broadcast-banner" style="display:none;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.3);color:#fde047;padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px;font-weight:600;align-items:center;gap:10px;">
+          <span style="font-size:16px">📢</span> <span id="dash-broadcast-text"></span>
         </div>
 
-        <div class="dashboard-grid">
-          <div class="dashboard-main">
-            <!-- MY LIBRARY -->
-            <div class="animate-in d1">
-          <div class="section-header" style="margin-bottom:10px">
+        <!-- COMPACT WELCOME + STATS ROW -->
+        <div class="home-summary-bar animate-in d1">
+          <div class="home-greeting-mini">
+            <div style="font-size:11px;color:var(--text-muted)" id="greeting-time">Good evening ✨</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Welcome back, <span style="background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="hero-name">Alex</span>!</div>
+          </div>
+          <div class="home-stat-pills">
+            <div class="stat-pill violet"><span class="pill-icon">📚</span><span class="pill-val" id="dash-stat-books">0</span><span class="pill-lbl">Books</span></div>
+            <div class="stat-pill cyan"><span class="pill-icon">📄</span><span class="pill-val" id="dash-stat-pages">0</span><span class="pill-lbl">Pages</span></div>
+            <div class="stat-pill amber"><span class="pill-icon">🔥</span><span class="pill-val" id="dash-stat-streak">0</span><span class="pill-lbl">Streak</span></div>
+            <div class="stat-pill pink"><span class="pill-icon">⏱️</span><span class="pill-val" id="dash-stat-hours">0</span><span class="pill-lbl">Hours</span></div>
+          </div>
+          <button class="hero-cta" onclick="openBook(0)">📖 Continue</button>
+        </div>
+        <!-- hidden for JS compat -->
+        <span id="dash-stat-best" style="display:none">0</span>
+
+        <!-- MY LIBRARY -->
+        <div class="animate-in d2" style="margin-top:18px">
+          <div class="section-header" style="margin-bottom:8px">
             <div class="section-title">📚 My Library</div>
             <div class="section-action" onclick="navTo('library')">View All →</div>
           </div>
           <div class="cat-chips" id="home-cat-chips">
             <div class="cat-chip active" onclick="homeFilterCat('all',this)">🔁 All</div>
             <div class="cat-chip" onclick="homeFilterCat('reading',this)">📖 Reading</div>
-            <div class="cat-chip" onclick="homeFilterCat('completed',this)">✅ Completed</div>
-            <div class="cat-chip" onclick="homeFilterCat('unread',this)">⏳ Not Started</div>
+            <div class="cat-chip" onclick="homeFilterCat('completed',this)">✅ Done</div>
+            <div class="cat-chip" onclick="homeFilterCat('unread',this)">⏳ Unread</div>
             <div class="cat-chip" onclick="homeFilterCat('Fantasy',this)">✨ Fantasy</div>
             <div class="cat-chip" onclick="homeFilterCat('Sci-Fi',this)">🚀 Sci-Fi</div>
             <div class="cat-chip" onclick="homeFilterCat('Thriller',this)">🔎 Thriller</div>
@@ -847,52 +869,17 @@
         </div>
 
         <!-- CONTINUE READING -->
-        <div class="section-header animate-in d2"><div class="section-title">Continue Reading</div></div>
-        <div class="continue-reading-card animate-in d2" id="continue-reading-card"></div>
+        <div class="section-header animate-in d3" style="margin-top:18px;margin-bottom:8px"><div class="section-title">Continue Reading</div></div>
+        <div class="continue-reading-card animate-in d3" id="continue-reading-card"></div>
 
         <!-- CATEGORY SHELVES -->
         <div id="category-shelves" class="animate-in d3"></div>
 
-        <!-- WELCOME GREETING -->
-        <div class="hero-greeting animate-in d3" style="margin-top:28px;margin-bottom:0px">
-          <div class="hero-text">
-            <div class="hero-sub" id="greeting-time">Good evening ✨</div>
-            <div class="hero-title">Welcome back, <span id="hero-name">Alex</span>!</div>
-            <div class="hero-desc">You're on a 7-day reading streak 🔥 Keep it going and finish your current book this week.</div>
-          </div>
-          <button class="hero-cta" onclick="openBook(0)">📖 Continue Reading</button>
-        </div>
-
-        <!-- READING STATS -->
         <div class="stats-grid animate-in d3" style="margin-top:20px">
           <div class="stat-card violet"><div class="stat-icon violet">📚</div><div class="stat-value" id="dash-stat-books">0</div><div class="stat-label">Books Read</div><div class="stat-change up">This month</div></div>
           <div class="stat-card cyan"><div class="stat-icon cyan">📄</div><div class="stat-value" id="dash-stat-pages">0</div><div class="stat-label">Pages Read</div><div class="stat-change up">This week</div></div>
           <div class="stat-card amber"><div class="stat-icon amber">🔥</div><div class="stat-value" id="dash-stat-streak">0</div><div class="stat-label">Day Streak</div><div class="stat-change neutral" id="dash-stat-best">Best: 0</div></div>
           <div class="stat-card pink"><div class="stat-icon pink">⏱️</div><div class="stat-value" id="dash-stat-hours">0</div><div class="stat-label">Hours Read</div><div class="stat-change up">Total</div></div>
-        </div>
-          </div>
-          <div class="sidebar-panel">
-
-        <!-- READING STREAK -->
-        <div class="panel-card animate-in d3" style="margin-top:0">
-          <div class="panel-card-header"><div class="panel-card-icon streak-bg">🔥</div><div class="panel-card-label">Reading Streak</div></div>
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div style="font-size:36px">🔥</div><div><div id="side-streak" style="font-size:32px;font-weight:900;line-height:1;color:var(--text-primary)">0</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Day Streak</div></div></div>
-          <div class="streak-days" id="streak-days"></div>
-        </div>
-
-        <!-- WEEKLY PAGES -->
-        <div class="panel-card animate-in d3" style="margin-top:0">
-          <div class="panel-card-header"><div class="panel-card-icon chart-bg">📊</div><div class="panel-card-label">Weekly Pages</div></div>
-          <div class="chart-container" id="weekly-chart"></div>
-        </div>
-
-        <!-- RECENT ACTIVITY -->
-        <div class="panel-card animate-in d3" style="margin-top:0;margin-bottom:0">
-          <div class="panel-card-header"><div class="panel-card-icon activity-bg">⚡</div><div class="panel-card-label">Recent Activity</div></div>
-          <div class="activity-list" id="activity-list"></div>
-        </div>
-
-          </div>
         </div>
 
       </div>
@@ -925,6 +912,29 @@
         </div>
         <div class="panel-card" style="margin-bottom:22px"><div class="section-title" style="margin-bottom:14px">Genre Distribution</div><div id="genre-bars"></div></div>
         <div class="panel-card"><div class="section-title" style="margin-bottom:14px">Monthly Reading Pace</div><div id="monthly-chart" style="display:flex;align-items:flex-end;gap:7px;height:150px;padding-top:8px"></div><div style="display:flex;gap:7px;margin-top:6px" id="monthly-labels"></div></div>
+        
+        <!-- Activity Grid (Moved from Dashboard) -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:22px;">
+          <!-- READING STREAK -->
+          <div class="panel-card animate-in d3" style="height:100%;display:flex;flex-direction:column;">
+            <div class="panel-card-header"><div class="panel-card-icon streak-bg">🔥</div><div class="panel-card-label">Reading Streak</div></div>
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div style="font-size:36px">🔥</div><div><div id="side-streak" style="font-size:32px;font-weight:900;line-height:1;color:var(--text-primary)">0</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Day Streak</div></div></div>
+            <div class="streak-days" id="streak-days" style="margin-top:auto;"></div>
+          </div>
+
+          <!-- WEEKLY PAGES -->
+          <div class="panel-card animate-in d3" style="height:100%;display:flex;flex-direction:column;">
+            <div class="panel-card-header"><div class="panel-card-icon chart-bg">📊</div><div class="panel-card-label">Weekly Pages</div></div>
+            <div class="chart-container" id="weekly-chart" style="flex:1;"></div>
+          </div>
+
+          <!-- RECENT ACTIVITY -->
+          <div class="panel-card animate-in d3" style="height:100%;display:flex;flex-direction:column;">
+            <div class="panel-card-header"><div class="panel-card-icon activity-bg">⚡</div><div class="panel-card-label">Recent Activity</div></div>
+            <div class="activity-list" id="activity-list" style="flex:1;"></div>
+          </div>
+        </div>
+
       </div>
 
       <!-- WISHLIST -->
@@ -1469,6 +1479,7 @@ function startSession(e){
   }
   
   showPage("dashboard");
+  document.body.classList.add('sidebar-collapsed');
   document.getElementById("nav-admin").style.display = (e === ADMIN_EMAIL) ? "flex" : "none";
   initDash();
 }
@@ -1527,6 +1538,15 @@ function updateUI(){
   Object.entries(els).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
   const inp=document.getElementById("profile-name-input");if(inp&&U)inp.value=U.name;
   
+  const loginBtn = document.getElementById('topbar-login-btn');
+  const topbarAvatar = document.getElementById('topbar-avatar');
+  if(loginBtn) {
+    loginBtn.style.display = (U?.email === 'guest@banglascan.io') ? 'block' : 'none';
+  }
+  if(topbarAvatar) {
+    topbarAvatar.style.display = (U?.email === 'guest@banglascan.io') ? 'none' : 'flex';
+  }
+  
   animateValue("dash-stat-books", 0, stats_.booksRead, 1000);
   animateValue("dash-stat-pages", 0, stats_.pagesRead, 1500);
   animateValue("dash-stat-streak", 0, streak_.current, 1000);
@@ -1578,7 +1598,6 @@ function navTo(s){
   if(backBtn) {
     if(s === 'home') backBtn.classList.remove('show-back');
     else backBtn.classList.add('show-back');
-    backBtn.style.display = '';
   }
   closeSidebar();
   window.scrollTo(0,0);
