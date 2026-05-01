@@ -100,11 +100,12 @@
       --gradient-progress: linear-gradient(90deg,#0ea5e9,#10b981);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;}
-    img{max-width:100%;display:block;}a{text-decoration:none;color:inherit;}
-    button{cursor:pointer;border:none;background:none;font-family:inherit;}ul{list-style:none;}
-    ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:var(--r-full);}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+    body{font-family:var(--font-ui);background:var(--bg-base);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--t-normal) var(--ease),color var(--t-normal) var(--ease);min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    img{max-width:100%;display:block;image-rendering:auto;}a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}ul{list-style:none;}
+    ::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:var(--r-full);}
+    *:focus-visible{outline:2px solid var(--accent-1);outline-offset:2px;border-radius:4px;}
 
     .page{display:none; opacity:0; transform:scale(0.95) translateY(18px); transition:opacity 0.5s var(--ease), transform 0.5s var(--ease-spring);}
     .page.active{display:flex; opacity:1; transform:scale(1) translateY(0);}
@@ -161,6 +162,37 @@
     .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--divider);}
     .btn-social{width:100%;padding:12px 24px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--r-full);font-size:14px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s var(--ease-spring);cursor:pointer;}
     .btn-social:hover{background:var(--bg-card-hover);border-color:var(--border-accent);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+
+    /* ===== CATEGORY SHELF ===== */
+    .category-shelf{margin-bottom:28px;}
+    .shelf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;}
+    .shelf-title{font-size:16px;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:8px;letter-spacing:-0.2px;}
+    .shelf-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:0.5px;text-transform:uppercase;}
+    .shelf-badge.new{background:rgba(16,185,129,0.15);color:var(--accent-success);border:1px solid rgba(16,185,129,0.3);}
+    .shelf-badge.hot{background:rgba(245,158,11,0.15);color:var(--accent-4);border:1px solid rgba(245,158,11,0.3);}
+    .shelf-badge.pick{background:rgba(124,58,237,0.15);color:var(--accent-2);border:1px solid rgba(124,58,237,0.3);}
+    .shelf-action{font-size:12px;font-weight:700;color:var(--accent-2);cursor:pointer;opacity:0.8;transition:opacity var(--t-fast) var(--ease);white-space:nowrap;padding:4px 8px;border-radius:var(--r-sm);}
+    .shelf-action:hover{opacity:1;background:rgba(124,58,237,0.1);}
+    .shelf-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .shelf-scroll::-webkit-scrollbar{display:none;}
+    .shelf-book{flex:0 0 auto;width:110px;scroll-snap-align:start;cursor:pointer;transition:transform var(--t-fast) var(--ease-spring);}
+    .shelf-book:hover,.shelf-book:active{transform:translateY(-4px) scale(1.03);}
+    .shelf-cover{width:110px;height:155px;border-radius:10px;overflow:hidden;position:relative;box-shadow:0 6px 20px rgba(0,0,0,0.3);background:var(--bg-elevated);}
+    .shelf-cover img{width:100%;height:100%;object-fit:cover;}
+    .shelf-cover-badge{position:absolute;top:6px;right:6px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(0,0,0,0.7);color:white;backdrop-filter:blur(4px);}
+    .shelf-book-name{font-size:11px;font-weight:700;margin-top:8px;color:var(--text-primary);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .shelf-book-author{font-size:10px;color:var(--text-muted);margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+    .shelf-book-rating{font-size:10px;color:var(--accent-4);margin-top:3px;font-weight:600;}
+    .shelf-book-prog{height:3px;background:var(--border);border-radius:999px;margin-top:5px;overflow:hidden;}
+    .shelf-book-prog-fill{height:100%;background:var(--gradient-progress);border-radius:999px;transition:width 0.5s var(--ease);}
+    /* Category chips on home */
+    .cat-chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none;margin-bottom:4px;}
+    .cat-chips::-webkit-scrollbar{display:none;}
+    .cat-chip{flex:0 0 auto;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all var(--t-fast) var(--ease);white-space:nowrap;}
+    .cat-chip.active,.cat-chip:hover{background:var(--gradient-accent);color:white;border-color:transparent;box-shadow:0 4px 14px rgba(124,58,237,0.35);}
+    /* Library header upgrade */
+    .library-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+    .library-count-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);}
 
     /* ===== DASHBOARD LAYOUT ===== */
     #page-dashboard{min-height:100vh;flex-direction:row;}
@@ -752,32 +784,57 @@
         <div id="dash-broadcast-banner" style="display:none;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.3);color:#fde047;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;font-weight:600;align-items:center;gap:10px;">
           <span style="font-size:18px">📢</span> <span id="dash-broadcast-text"></span>
         </div>
-        <div class="section-header animate-in d1"><div class="section-title">Continue Reading</div></div>
-        <div class="continue-reading-card animate-in d1" id="continue-reading-card"></div>
-        <div class="dashboard-grid animate-in d2">
+
+        <!-- MY LIBRARY AT TOP -->
+        <div class="animate-in d1">
+          <div class="section-header" style="margin-bottom:10px">
+            <div class="section-title">📚 My Library</div>
+            <div class="section-action" onclick="navTo('library')">View All →</div>
+          </div>
+          <div class="cat-chips" id="home-cat-chips">
+            <div class="cat-chip active" onclick="homeFilterCat('all',this)">🔁 All</div>
+            <div class="cat-chip" onclick="homeFilterCat('reading',this)">📖 Reading</div>
+            <div class="cat-chip" onclick="homeFilterCat('completed',this)">✅ Completed</div>
+            <div class="cat-chip" onclick="homeFilterCat('unread',this)">⏳ Not Started</div>
+            <div class="cat-chip" onclick="homeFilterCat('Fantasy',this)">✨ Fantasy</div>
+            <div class="cat-chip" onclick="homeFilterCat('Sci-Fi',this)">🚀 Sci-Fi</div>
+            <div class="cat-chip" onclick="homeFilterCat('Thriller',this)">🔎 Thriller</div>
+            <div class="cat-chip" onclick="homeFilterCat('Romance',this)">❤️ Romance</div>
+            <div class="cat-chip" onclick="homeFilterCat('Adventure',this)">🌍 Adventure</div>
+          </div>
+          <div class="shelf-scroll" id="home-library-shelf"></div>
+        </div>
+
+        <!-- CONTINUE READING -->
+        <div class="section-header animate-in d2"><div class="section-title">Continue Reading</div></div>
+        <div class="continue-reading-card animate-in d2" id="continue-reading-card"></div>
+
+        <!-- CATEGORY SHELVES -->
+        <div id="category-shelves" class="animate-in d3"></div>
+
+        <!-- QUICK STATS + SIDE PANEL -->
+        <div class="dashboard-grid animate-in d3">
           <div>
-            <div class="section-header"><div class="section-title">My Library</div><div class="section-action" onclick="navTo('library')">View All →</div></div>
-            <div class="books-grid" id="home-book-grid"></div>
+            <div class="hero-greeting" style="margin-bottom:20px">
+              <div class="hero-text">
+                <div class="hero-sub" id="greeting-time">Good evening ✨</div>
+                <div class="hero-title">Welcome back, <span id="hero-name">Alex</span>!</div>
+                <div class="hero-desc">You're on a 7-day reading streak 🔥 Keep it going and finish your current book this week.</div>
+              </div>
+              <button class="hero-cta" onclick="openBook(0)">📖 Continue Reading</button>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card violet"><div class="stat-icon violet">📚</div><div class="stat-value" id="dash-stat-books">0</div><div class="stat-label">Books Read</div><div class="stat-change up">This month</div></div>
+              <div class="stat-card cyan"><div class="stat-icon cyan">📄</div><div class="stat-value" id="dash-stat-pages">0</div><div class="stat-label">Pages Read</div><div class="stat-change up">This week</div></div>
+              <div class="stat-card amber"><div class="stat-icon amber">🔥</div><div class="stat-value" id="dash-stat-streak">0</div><div class="stat-label">Day Streak</div><div class="stat-change neutral" id="dash-stat-best">Best: 0</div></div>
+              <div class="stat-card pink"><div class="stat-icon pink">⏱️</div><div class="stat-value" id="dash-stat-hours">0</div><div class="stat-label">Hours Read</div><div class="stat-change up">Total</div></div>
+            </div>
           </div>
           <div class="sidebar-panel">
             <div class="panel-card streak-card"><div class="streak-flame">🔥</div><div class="streak-number" id="side-streak">0</div><div class="streak-label">Day Reading Streak</div><div class="streak-days" id="streak-days"></div></div>
             <div class="panel-card"><div class="section-title" style="font-size:14px;margin-bottom:14px">Weekly Pages</div><div class="chart-container" id="weekly-chart"></div></div>
             <div class="panel-card"><div class="section-title" style="font-size:14px;margin-bottom:14px">Recent Activity</div><div class="activity-list" id="activity-list"></div></div>
           </div>
-        </div>
-        <div class="hero-greeting animate-in d3">
-          <div class="hero-text">
-            <div class="hero-sub" id="greeting-time">Good evening ✨</div>
-            <div class="hero-title">Welcome back, <span id="hero-name">Alex</span>!</div>
-            <div class="hero-desc">You're on a 7-day reading streak 🔥 Keep it going and finish your current book this week.</div>
-          </div>
-          <button class="hero-cta" onclick="openBook(0)">📖 Continue Reading</button>
-        </div>
-        <div class="stats-grid animate-in d3">
-          <div class="stat-card violet"><div class="stat-icon violet">📚</div><div class="stat-value" id="dash-stat-books">0</div><div class="stat-label">Books Read</div><div class="stat-change up">This month</div></div>
-          <div class="stat-card cyan"><div class="stat-icon cyan">📄</div><div class="stat-value" id="dash-stat-pages">0</div><div class="stat-label">Pages Read</div><div class="stat-change up">This week</div></div>
-          <div class="stat-card amber"><div class="stat-icon amber">🔥</div><div class="stat-value" id="dash-stat-streak">0</div><div class="stat-label">Day Streak</div><div class="stat-change neutral" id="dash-stat-best">Best: 0</div></div>
-          <div class="stat-card pink"><div class="stat-icon pink">⏱️</div><div class="stat-value" id="dash-stat-hours">0</div><div class="stat-label">Hours Read</div><div class="stat-change up">Total</div></div>
         </div>
 
       </div>
@@ -1400,7 +1457,7 @@ function initDash(){
     if(banner) banner.style.display = "none";
   }
   loadProgress();updateGreeting();updateUI();
-  renderCR();renderHomeGrid();renderActs();renderStreak();renderWeek();
+  renderCR();renderHomeLibraryShelf('all');renderCategoryShelf();renderActs();renderStreak();renderWeek();
   renderLib("all");renderWish();renderExplore();renderTrending();
   renderGenres();renderMonthly();syncUI();
 }
@@ -1495,7 +1552,119 @@ function bc(b){
     <div class="book-rating"><span style="color:var(--accent-4)">${s.slice(0,5)}</span><span style="color:var(--text-muted);font-size:10px;margin-left:3px">${b.rating}</span><span style="margin-left:auto;font-size:10px;font-weight:700;color:${bc_}">${badge}</span></div>
   </div>`;
 }
-function renderHomeGrid(){document.getElementById("home-book-grid").innerHTML=BOOKS.slice(0,4).map(bc).join("");}
+// Build a single shelf book card
+function shelfBookCard(b, badgeText) {
+  const p = progress[b.id] ?? b.progress ?? 0;
+  const stars = '★'.repeat(Math.round(b.rating||0)) + '☆'.repeat(5-Math.round(b.rating||0));
+  const isWish = b.status === 'wishlist';
+  return `<div class="shelf-book" onclick="openBook(${b.id},${isWish})">
+    <div class="shelf-cover">
+      <img src="${b.cover}" alt="${b.title}" loading="lazy" />
+      ${badgeText ? `<div class="shelf-cover-badge">${badgeText}</div>` : ''}
+    </div>
+    <div class="shelf-book-name">${b.title}</div>
+    <div class="shelf-book-author">${b.author}</div>
+    <div class="shelf-book-rating">${stars.slice(0,5)} ${b.rating||''}</div>
+    ${p > 0 && p < 100 ? `<div class="shelf-book-prog"><div class="shelf-book-prog-fill" style="width:${p}%"></div></div>` : ''}
+  </div>`;
+}
+
+// Render My Library shelf on home tab with filter
+function renderHomeLibraryShelf(filter) {
+  let books = BOOKS;
+  if (filter && filter !== 'all') {
+    books = BOOKS.filter(b => {
+      const p = progress[b.id] ?? b.progress ?? 0;
+      if (filter === 'reading') return p > 0 && p < 100;
+      if (filter === 'completed') return p >= 100;
+      if (filter === 'unread') return p === 0;
+      return b.genre === filter || b.status === filter;
+    });
+  }
+  const shelf = document.getElementById('home-library-shelf');
+  if (!shelf) return;
+  if (!books.length) {
+    shelf.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:20px 0;">No books found in this category.</div>';
+    return;
+  }
+  const badges = { reading: '📖', completed: '✅', unread: '⬜' };
+  shelf.innerHTML = books.map(b => {
+    const p = progress[b.id] ?? b.progress ?? 0;
+    const badgeTxt = p >= 100 ? '✅' : p > 0 ? `${p}%` : '';
+    return shelfBookCard(b, badgeTxt);
+  }).join('');
+}
+
+function homeFilterCat(filter, el) {
+  document.querySelectorAll('#home-cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderHomeLibraryShelf(filter);
+}
+
+// Render discover category shelves
+function renderCategoryShelf() {
+  const allBooks = [...BOOKS, ...WISHLIST];
+  const sections = [
+    {
+      id: 'popular', icon: '🔥', title: 'Popular Right Now', badge: 'HOT', badgeClass: 'hot',
+      books: [...allBooks].sort((a,b) => (b.rating||0)-(a.rating||0)),
+      getBadge: b => `⭐ ${b.rating}`
+    },
+    {
+      id: 'reading', icon: '📖', title: 'Continue Reading', badge: null, badgeClass: null,
+      books: BOOKS.filter(b => { const p=progress[b.id]??b.progress??0; return p>0&&p<100; }),
+      getBadge: b => { const p=progress[b.id]??b.progress??0; return p>0?`${p}%`:''; }
+    },
+    {
+      id: 'recommended', icon: '💡', title: 'Recommended For You', badge: 'PICK', badgeClass: 'pick',
+      books: [...allBooks].sort(() => Math.random()-0.5).slice(0,6),
+      getBadge: () => '✨'
+    },
+    {
+      id: 'latest', icon: '🆕', title: 'Latest Updates', badge: 'NEW', badgeClass: 'new',
+      books: [...allBooks].slice().reverse(),
+      getBadge: () => 'New'
+    },
+    {
+      id: 'scifi', icon: '🚀', title: 'Sci-Fi & Adventure', badge: null, badgeClass: null,
+      books: allBooks.filter(b => b.genre==='Sci-Fi'||b.genre==='Adventure'),
+      getBadge: b => b.genre
+    },
+    {
+      id: 'selfpub', icon: '✍️', title: 'Self-Published Authors', badge: 'INDIE', badgeClass: 'pick',
+      books: allBooks.filter(b => ['Nix Patel','Sandra Voss','Isabelle Moore'].includes(b.author)),
+      getBadge: () => 'Indie'
+    },
+    {
+      id: 'seasonal', icon: '🌸', title: 'Seasonal Picks', badge: 'SEASONAL', badgeClass: 'new',
+      books: allBooks.filter(b => b.genre==='Romance'||b.genre==='Fantasy'),
+      getBadge: () => '🌸'
+    },
+    {
+      id: 'recent', icon: '⏱️', title: 'Recently Added', badge: 'NEW', badgeClass: 'new',
+      books: allBooks.slice(-4),
+      getBadge: () => 'New'
+    }
+  ];
+
+  const wrap = document.getElementById('category-shelves');
+  if (!wrap) return;
+  wrap.innerHTML = sections.map(sec => {
+    const books = sec.books.slice(0, 10);
+    if (!books.length) return '';
+    return `<div class="category-shelf">
+      <div class="shelf-header">
+        <div class="shelf-title">${sec.icon} ${sec.title}
+          ${sec.badge ? `<span class="shelf-badge ${sec.badgeClass}">${sec.badge}</span>` : ''}
+        </div>
+        <div class="shelf-action" onclick="navTo('explore')">See all →</div>
+      </div>
+      <div class="shelf-scroll">${books.map(b => shelfBookCard(b, sec.getBadge(b))).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHomeGrid(){const el=document.getElementById("home-book-grid");if(el)el.innerHTML=BOOKS.slice(0,4).map(bc).join("");}
 function renderLib(f){
   let books=BOOKS;
   if(f!=="all")books=BOOKS.filter(b=>{const p=progress[b.id]??b.progress;return f==="reading"?p>0&&p<100:f==="completed"?p>=100:f==="unread"?p===0:b.genre===f;});
